@@ -1,0 +1,37 @@
+﻿% !TEX encoding = UTF-8 Unicode
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{gitsetinfo}[2011/08/10 v1.00 Auxiliary package for gitinfo]
+\RequirePackage{kvoptions}
+\SetupKeyvalOptions{%
+	family=gitinfo,
+	prefix=gitInf@
+	}
+\DeclareStringOption{shash}
+\DeclareStringOption{lhash}
+\DeclareStringOption{authname}
+\DeclareStringOption{authemail}
+\DeclareStringOption{authsdate}
+\DeclareStringOption{authidate}
+\DeclareStringOption{authudate}
+\DeclareStringOption{commname}
+\DeclareStringOption{commemail}
+\DeclareStringOption{commsdate}
+\DeclareStringOption{commidate}
+\DeclareStringOption{commudate}
+\DeclareStringOption{refnames}
+\DeclareStringOption{subject}
+\ProcessKeyvalOptions*
+\newcommand{\gitAbbrevHash}{\gitInf@shash}
+\newcommand{\gitHash}{\gitInf@lhash}
+\newcommand{\gitAuthorName}{\gitInf@authname}
+\newcommand{\gitAuthorEmail}{\gitInf@authemail}
+\newcommand{\gitAuthorDate}{\gitInf@authsdate}
+\newcommand{\gitAuthorIsoDate}{\gitInf@authidate}
+\newcommand{\gitAuthorUnixDate}{\gitInf@authudate}
+\newcommand{\gitCommitterName}{\gitInf@commname}
+\newcommand{\gitCommitterEmail}{\gitInf@commemail}
+\newcommand{\gitCommitterDate}{\gitInf@commsdate}
+\newcommand{\gitCommitterIsoDate}{\gitInf@commidate}
+\newcommand{\gitCommitterUnixDate}{\gitInf@commudate}
+\newcommand{\gitCommitMessage}{\gitInf@subject}
+\newcommand{\gitReferences}{\gitInf@refnames}

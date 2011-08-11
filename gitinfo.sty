@@ -1,0 +1,38 @@
+% !TEX encoding = UTF-8 Unicode
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{gitinfo}[2011/08/10 v1.00 git revision information]
+\RequirePackage{ifthen}
+\newboolean{@ftinfo}
+\newboolean{@pcount}
+\DeclareOption{footinfo}{\setboolean{@ftinfo}{true}}
+\DeclareOption{pcount}{\setboolean{@pcount}{true}}
+\ProcessOptions
+\InputIfFileExists{gitHeadInfo}{}{%
+	\PackageError{gitinfo}{I can't find the file `gitHeadInfo.tex`.\MessageBreak
+	Please check the `gitinfo' manual if you need more details.}
+}
+\@ifclassloaded{memoir}{%
+	\ifthenelse{\boolean{@ftinfo}}{%
+		\ifthenelse{\boolean{@pcount}}{%
+			\newcommand{\@gitPage}{\thepage/\thelastpage}
+			\addtodef{\frontmatter}{\renewcommand{\@gitPage}{\thepage}}{}
+			\addtodef{\mainmatter}{}{\renewcommand{\@gitPage}{\thepage/\thelastpage}}
+		}{%
+			\newcommand{\@gitPage}{\thepage}
+		}
+		\newcommand{\@gitrFootRev}{%
+			\tiny\textsf{\raggedleft Revision: \gitAbbrevHash{} (\gitAuthorDate)}%
+			}
+		\newcommand{\@gitlFootRev}{%
+			\tiny\textsf{Revision: \gitAbbrevHash{} (\gitAuthorDate)}%
+			}
+		\makeevenfoot{plain}{\@gitPage}{}{\@gitrFootRev}
+		\makeoddfoot{plain}{\@gitlFootRev}{}{\@gitPage}
+		\makeevenfoot{ruled}{\@gitPage}{}{\@gitrFootRev}
+		\makeoddfoot{ruled}{\@gitlFootRev}{}{\@gitPage}
+		\makeevenfoot{headings}{\@gitPage}{}{\@gitrFootRev}
+		\makeoddfoot{headings}{\@gitlFootRev}{}{\@gitPage}
+		\makeevenhead{headings}{}{}{\slshape\leftmark}
+		\makeoddhead{headings}{\slshape\rightmark}{}{}
+	}{}
+}{}
