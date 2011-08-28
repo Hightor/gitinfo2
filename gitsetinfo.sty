@@ -1,7 +1,8 @@
-﻿% !TEX encoding = UTF-8 Unicode
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{gitsetinfo}[2011/08/10 v1.00 Auxiliary package for gitinfo]
 \RequirePackage{kvoptions}
+\RequirePackage{xstring}
+\RequirePackage{etoolbox}
 \SetupKeyvalOptions{%
 	family=gitinfo,
 	prefix=gitInf@
@@ -35,3 +36,13 @@
 \newcommand{\gitCommitterUnixDate}{\gitInf@commudate}
 \newcommand{\gitCommitMessage}{\gitInf@subject}
 \newcommand{\gitReferences}{\gitInf@refnames}
+\newcommand{\gitVtag}{}
+\newcommand{\gitVtagn}{\space(None)}
+\newcommand{\git@vtag}[1]{%
+	\PackageInfo{gitinfo}{Processing #1}
+	\def\do##1{%
+		\IfDecimal{##1}{\renewcommand{\gitVtag}{\space##1}\renewcommand{\gitVtagn}{\space##1}\listbreak}{\PackageInfo{git}{##1 no}}%
+	}%
+	\expandafter\docsvlist\expandafter{#1}%
+}%
+\git@vtag{\gitInf@refnames}

@@ -20,11 +20,12 @@
 		}{%
 			\newcommand{\@gitPage}{\thepage}
 		}
+		\newcommand{\@gitFootRev}{Revision\gitVtag: \gitAbbrevHash{} (\gitAuthorDate)}
 		\newcommand{\@gitrFootRev}{%
-			\tiny\textsf{\raggedleft Revision: \gitAbbrevHash{} (\gitAuthorDate)}%
+			\tiny\textsf{\raggedleft \@gitFootRev}%
 			}
 		\newcommand{\@gitlFootRev}{%
-			\tiny\textsf{Revision: \gitAbbrevHash{} (\gitAuthorDate)}%
+			\tiny\textsf{\@gitFootRev}%
 			}
 		\makeevenfoot{plain}{\@gitPage}{}{\@gitrFootRev}
 		\makeoddfoot{plain}{\@gitlFootRev}{}{\@gitPage}
