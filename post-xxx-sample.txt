@@ -1,4 +1,7 @@
 #!/bin/sh
+# Copyright 2011 Brent Longborough
+# Please read gitinfo.pdf for licencing and other details
+# -----------------------------------------------------
 # Post-{commit,checkout,merge} hook for the gitinfo package
 #
 prefixes=". test docs"    # Example for multiple gitHeadInfo.tex files
@@ -19,8 +22,6 @@ for pref in $prefixes
 		commsdate={%ad},
 		commidate={%ai},
 		commudate={%at},
-		refnames={%d},
-		subject={%s}
-	]{gitsetinfo}
-	" HEAD > $pref/gitHeadInfo.tex
+		refnames={%d}
+	]{gitsetinfo}" HEAD > $pref/gitHeadInfo.gin
 	done
