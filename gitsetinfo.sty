@@ -22,26 +22,28 @@
 \DeclareStringOption{refnames}
 \DeclareStringOption{subject}
 \ProcessKeyvalOptions*
-\newcommand{\gitAbbrevHash}{\gitInf@shash}
-\newcommand{\gitHash}{\gitInf@lhash}
-\newcommand{\gitAuthorName}{\gitInf@authname}
-\newcommand{\gitAuthorEmail}{\gitInf@authemail}
-\newcommand{\gitAuthorDate}{\gitInf@authsdate}
-\newcommand{\gitAuthorIsoDate}{\gitInf@authidate}
-\newcommand{\gitAuthorUnixDate}{\gitInf@authudate}
-\newcommand{\gitCommitterName}{\gitInf@commname}
-\newcommand{\gitCommitterEmail}{\gitInf@commemail}
-\newcommand{\gitCommitterDate}{\gitInf@commsdate}
-\newcommand{\gitCommitterIsoDate}{\gitInf@commidate}
-\newcommand{\gitCommitterUnixDate}{\gitInf@commudate}
-\newcommand{\gitCommitMessage}{\gitInf@subject}
-\newcommand{\gitReferences}{\gitInf@refnames}
-\newcommand{\gitVtag}{}
-\newcommand{\gitVtagn}{\space(None)}
+\renewcommand{\gitAbbrevHash}{\gitInf@shash}
+\renewcommand{\gitHash}{\gitInf@lhash}
+\renewcommand{\gitAuthorName}{\gitInf@authname}
+\renewcommand{\gitAuthorEmail}{\gitInf@authemail}
+\renewcommand{\gitAuthorDate}{\gitInf@authsdate}
+\renewcommand{\gitAuthorIsoDate}{\gitInf@authidate}
+\renewcommand{\gitAuthorUnixDate}{\gitInf@authudate}
+\renewcommand{\gitCommitterName}{\gitInf@commname}
+\renewcommand{\gitCommitterEmail}{\gitInf@commemail}
+\renewcommand{\gitCommitterDate}{\gitInf@commsdate}
+\renewcommand{\gitCommitterIsoDate}{\gitInf@commidate}
+\renewcommand{\gitCommitterUnixDate}{\gitInf@commudate}
+\renewcommand{\gitCommitMessage}{\gitInf@subject}
+\renewcommand{\gitReferences}{\gitInf@refnames}
 \newcommand{\git@vtag}[1]{%
-	\PackageInfo{gitinfo}{Processing #1}
 	\def\do##1{%
-		\IfDecimal{##1}{\renewcommand{\gitVtag}{\space##1}\renewcommand{\gitVtagn}{\space##1}\listbreak}{\PackageInfo{git}{##1 no}}%
+		\IfDecimal{##1}{%
+			\renewcommand{\gitVtag}{##1}
+			\renewcommand{\gitVtags}{\space##1}
+			\renewcommand{\gitVtagn}{\space##1}
+			\listbreak
+		}{}%
 	}%
 	\expandafter\docsvlist\expandafter{#1}%
 }%

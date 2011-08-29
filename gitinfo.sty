@@ -1,19 +1,47 @@
 % !TEX encoding = UTF-8 Unicode
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{gitinfo}[2011/08/10 v1.00 git revision information]
-\RequirePackage{ifthen}
-\newboolean{@ftinfo}
-\newboolean{@pcount}
-\DeclareOption{footinfo}{\setboolean{@ftinfo}{true}}
-\DeclareOption{pcount}{\setboolean{@pcount}{true}}
-\ProcessOptions
+\RequirePackage{etoolbox}
+\RequirePackage{kvoptions}
+\SetupKeyvalOptions{%
+	family=gitInfo,
+	prefix=gitInf@
+	}
+\DeclareBoolOption{strict}
+\DeclareBoolOption{pcount}
+\DeclareBoolOption{footinfo}
+\DeclareStringOption[(None)]{missing}
+\ProcessKeyvalOptions*
+\newcommand{\gitAbbrevHash}{\gitInf@absent}
+\newcommand{\gitHash}{\gitInf@absent}
+\newcommand{\gitAuthorName}{\gitInf@absent}
+\newcommand{\gitAuthorEmail}{\gitInf@absent}
+\newcommand{\gitAuthorDate}{\gitInf@absent}
+\newcommand{\gitAuthorIsoDate}{\gitInf@absent}
+\newcommand{\gitAuthorUnixDate}{\gitInf@absent}
+\newcommand{\gitCommitterName}{\gitInf@absent}
+\newcommand{\gitCommitterEmail}{\gitInf@absent}
+\newcommand{\gitCommitterDate}{\gitInf@absent}
+\newcommand{\gitCommitterIsoDate}{\gitInf@absent}
+\newcommand{\gitCommitterUnixDate}{\gitInf@absent}
+\newcommand{\gitCommitMessage}{\gitInf@absent}
+\newcommand{\gitReferences}{\gitInf@absent}
+\newcommand{\gitVtag}{}
+\newcommand{\gitVtags}{}
+\newcommand{\gitVtagn}{\space\gitInf@absent}
 \InputIfFileExists{gitHeadInfo}{}{%
-	\PackageError{gitinfo}{I can't find the file `gitHeadInfo.tex`.\MessageBreak
-	Please check the `gitinfo' manual if you need more details.}
+	\ifbool{gitInf@strict}{%
+		\PackageError{gitinfo}{I can't find the file `gitHeadInfo.tex`.\MessageBreak
+		Please check the manual (gitinfo.pdf) \MessageBreak 
+		if you need more details.}{}
+	}{%
+		\PackageWarning{gitInfo}{I can't find the file `gitHeadInfo.tex`.\MessageBreak
+		All git metadata has been set to ``\gitInf@absent''.}
+	}
 }
 \@ifclassloaded{memoir}{%
-	\ifthenelse{\boolean{@ftinfo}}{%
-		\ifthenelse{\boolean{@pcount}}{%
+	\ifbool{gitInf@footinfo}{%
+		\ifbool{gitInf@pcount}{
 			\newcommand{\@gitPage}{\thepage/\thelastpage}
 			\addtodef{\frontmatter}{\renewcommand{\@gitPage}{\thepage}}{}
 			\addtodef{\mainmatter}{}{\renewcommand{\@gitPage}{\thepage/\thelastpage}}
