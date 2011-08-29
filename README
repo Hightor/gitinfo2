@@ -1,0 +1,13 @@
+    The `gitinfo' package provides to allow version control metadata
+to be incorporated into documents. The metadata is obtained from
+the git distributed version control system. 
+    For `memoir' users, the package can, optionally, tailor some
+page headers and footers with certain metadata.
+
+    gitinfo is licenced under the LPPL. For more details, 
+please see the accompanying manual: gitinfo.pdf.
+
+Change History
+~~~~~~~~~~~~~~
+
+2011-08-29  1.0  Initial release
