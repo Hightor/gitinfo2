@@ -8,7 +8,7 @@ prefixes=". test docs"    # Example for multiple gitHeadInfo.tex files
 prefixes="."              # Default --- in the working copy root
 for pref in $prefixes
 	do
-	git log -1 --date=short \
+	git --no-pager log -1 --date=short \
 	--pretty=format:"\usepackage[%
 		shash={%h},
 		lhash={%H},
