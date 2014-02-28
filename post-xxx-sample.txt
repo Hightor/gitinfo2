@@ -8,7 +8,10 @@ prefixes=". test docs"    # Example for multiple gitHeadInfo.tex files
 prefixes="."              # Default --- in the working copy root
 for pref in $prefixes
 	do
-	git --no-pager log -1 --date=short \
+  # gets the first tag found in the history from the current HEAD
+  FIRSTTAG=$(git describe --tags 2>/dev/null)
+  
+  git log -1 --date=short \
 	--pretty=format:"\usepackage[%
 		shash={%h},
 		lhash={%H},
@@ -22,6 +25,7 @@ for pref in $prefixes
 		commsdate={%ad},
 		commidate={%ai},
 		commudate={%at},
-		refnames={%d}
+		refnames={%d},
+    firsttagdescribe={$FIRSTTAG}
 	]{gitsetinfo}" HEAD > $pref/gitHeadInfo.gin
 	done
