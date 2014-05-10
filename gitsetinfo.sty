@@ -38,6 +38,7 @@
 \DeclareStringOption{commidate}
 \DeclareStringOption{commudate}
 \DeclareStringOption{refnames}
+\DeclareStringOption{firsttagdescribe}
 \ProcessKeyvalOptions*
 \renewcommand{\gitAbbrevHash}{\gitInf@shash}
 \renewcommand{\gitHash}{\gitInf@lhash}
@@ -51,6 +52,7 @@
 \renewcommand{\gitCommitterDate}{\gitInf@commsdate}
 \renewcommand{\gitCommitterIsoDate}{\gitInf@commidate}
 \renewcommand{\gitCommitterUnixDate}{\gitInf@commudate}
+\renewcommand{\gitFirstTagDescribe}{\gitInf@firsttagdescribe}
 \renewcommand{\gitReferences}{\gitInf@refnames}
 \newcommand{\git@vtag}[1]{%
 	\def\do##1{%
