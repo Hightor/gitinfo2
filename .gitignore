@@ -10,7 +10,7 @@
 *.out
 *.pyc
 *.snm
-*.synctex.gz
+*.synctex.gz*
 *.toc
 *~
 .#*
