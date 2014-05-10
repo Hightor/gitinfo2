@@ -46,14 +46,18 @@
 \newcommand{\gitVtags}{}
 \newcommand{\gitVtagn}{\space\gitInf@missing}
 \InputIfFileExists{./gitHeadInfo.gin}{}{%
-	\ifbool{gitInf@grumpy}{%
-		\PackageError{gitinfo}{I can't find the file `gitHeadInfo.gin`.\MessageBreak
-		Please check the manual (gitinfo.pdf) \MessageBreak 
-		if you need more details.}{}
-	}{%
-		\PackageWarning{gitInfo}{I can't find the file `gitHeadInfo.gin`.\MessageBreak
-		All git metadata has been set to ``\gitInf@missing''.}
-	}
+    \InputIfFileExists{../gitHeadInfo.gin}{}{%
+        \InputIfFileExists{../../gitHeadInfo.gin}{}{%
+            \ifbool{gitInf@grumpy}{%
+                \PackageError{gitinfo}{I can't find the file `gitHeadInfo.gin`.\MessageBreak
+                Please check the manual (gitinfo.pdf) \MessageBreak 
+                if you need more details.}{}
+            }{%
+                \PackageWarning{gitInfo}{I can't find the file `gitHeadInfo.gin`.\MessageBreak
+                All git metadata has been set to ``\gitInf@missing''.}
+            }
+        }
+    }
 }
 \@ifclassloaded{memoir}{%
 	\ifbool{gitInf@footinfo}{%
