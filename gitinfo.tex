@@ -1,5 +1,5 @@
 % gitinfo.tex   
-% Copyright 2011 Brent Longborough
+% Copyright 2014 Brent Longborough
 %
 % This work may be distributed and/or modified under the
 % conditions of the LaTeX Project Public License, either version 1.3
@@ -181,7 +181,12 @@ which will cause copies of the metadata to be saved in
 just those two directories.
 In this example, it will not be accessible to documents
 kept in the working copy's root
-(designated by ``.'', omitted in this case),
+(designated by ``.'', omitted in this case).
+
+\item If you're using a unix-like system, 
+don't forget to make the file executable.
+Just how you do this is outside the scope of this manual,
+but one possible way is with commands such as \verb!chmod g+x post-checkout!.
 
 \item Test your setup with ``git checkout master''
 (or another suitable branch name).
@@ -190,7 +195,13 @@ you intended.
 
 \item Now make two more copies of this file in the same directory (\texttt{hooks}), calling them
 \texttt{post-commit} and \texttt{post-merge}, and you're done.
+As before, users of unix-like systems should ensure these files are marked as executable.
 \end{enumerate}
+
+If you don't want to install \tpname\ using a package manager,
+you can instead just copy the two *.sty files into your document directory.
+However, it may be simpler, for more complex project trees, 
+to install the package as part of your \TeX distribution.
 % -----------------------------------------------------
 \chapter{Using the package}
 \label{ch:using}
@@ -297,11 +308,6 @@ gitCommitterUnixDate&
     The date and time this change was committed by the committer,
     as a Unix timestamp, e.g \textit{1314619554}
 \\
-gitFirstTagDescribe&
-	The last tag reachable from the current HEAD, see 
-	git-describe for more information.
-
-\\
 gitReferences&
     A list of any \git\ references (tags, branches) associated
     with this commit, e.g. \textit{ (HEAD, master)}
@@ -333,6 +339,52 @@ gitVtagn&
     the \texttt{missing} package option.
 \\
 \end{tabularx}
+
+\subsection{Additional metadata (Version 2)}
+
+From Version 2 onwards, additional \git\ metadata is available, in general improving or extending the facilities available in Version 1.
+The Version 1 metadata is retained for backward compatibility.
+
+Included is a new set of \texttt{gitRel} commands, 
+designed to replace \texttt{gitVtag} and its cousins. 
+\tpname\ searches the \git\ metadata for tags 
+on the current \textsc{head} commit or its ancestors, 
+and makes the first tag found available. 
+It also looks for the latest such tag containing a full stop or period, 
+and makes the tag, and the number of commits following it, 
+available as a `release number'.%
+\footnote{\tpname\ doesn't check for numerics, so if you add a tag like `ctan.org' you may well get given it back as a release number.} 
+Here are the new commands in Version 2:
+\vspace{0.5\baselineskip}
+
+\noindent
+\begin{tabularx}{\textwidth}{@{}>{\ttfamily\bfseries\textbackslash}lX@{}}gitFirstTagDescribe&
+	The last tag reachable from the current \textsc{head}.
+    This is a string in the form
+    \textit{tagname}--\textit{offset}--g\textit{commit-id}.
+    Please see git-describe for more information.
+\\
+gitRel&
+    The release number, without any decorations.
+    If no release number is found, empty (i.e. zero width).
+\\
+gitRels&
+    The release number, with a leading space. 
+    If no release number is found, empty.
+\\
+gitReln&
+    The release number, with a leading space.
+    If no release number is found, a space,
+    followed by the default or specified value of
+    the \texttt{missing} package option.
+\\
+gitCcount&
+    The number of commits between the tag holding the release number
+    and the current \textsc{head}.
+    If the tag refers to the current \textsc{head}, zero.
+\\
+\end{tabularx}
+
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - -
 \section{For \sfit{memoir} users}
@@ -399,6 +451,7 @@ the Current Maintainer of this work is Brent Longborough.
 This work consists of the files 
 gitinfo.sty, gitsetinfo.sty, gitinfo.tex, gitinfo.pdf,
 post-git-sample.txt, and \ginname.
+
 % - - - - - - - - - - - - - - - - - - - - - - - - - - -
 \section{From the author}
 Although my limitations as a \TeX nician
