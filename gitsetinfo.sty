@@ -73,6 +73,13 @@
         }%
     }%
     \expandafter\docsvlist\expandafter{#1}%
+    \StrDel{#1}{)}[\lcut]%
+    \StrDel{\lcut}{(HEAD}[\lcut]%
+    \StrCount{\lcut}{, }[\rcut]%
+    \StrCut[\rcut]{\lcut}{, }{\lcut}{\rcut}%
+    \IfEq{\rcut}{}{}{%
+        \renewcommand{\gitBranch}{\rcut}%
+    }%
 }%
 \newcommand{\git@rtag}[1]{%
     \IfEq{#1}{}{}{%
