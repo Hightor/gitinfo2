@@ -53,13 +53,14 @@
 \newcommand{\gitReln}{\space\gitInf@missing}
 \newcommand{\gitDirty}{}
 \newcommand{\gitRoff}{}
+\newcommand{\gitDescribe}{(None)}
 
 % private values
 \newif\ifGI@is@a@repo@
 
 % private constants
-\newcommand{\GI@repo@prefix}{}
-\newcommand{\GI@githeadinfo@file}{\GI@repo@prefix.git/gitHeadInfo.gin}
+\providecommand{\GI@repo@prefix}{}
+\providecommand{\GI@githeadinfo@file}{\GI@repo@prefix.git/gitHeadInfo.gin}
 \newcommand{\gitInf@dirtflag}{}
 \newcommand{\gitInf@describe}{}
 \newcommand{\gitInf@mcount}{}
@@ -89,7 +90,8 @@
 \newcommand\GI@set@repo@prefix@{%
   \advance\count@\m@ne
   \ifnum\count@<\z@
-    \expandafter\GI@not@a@git@repo
+    % \expandafter\GI@not@a@git@repo
+    \endgroup\relax
   \else
     \edef\GI@repo@prefix{../\GI@repo@prefix}%
     \IfFileExists{\GI@githeadinfo@file}{%
@@ -101,23 +103,23 @@
       \expandafter\GI@set@repo@prefix@}%
   \fi}
 
-\newcommand\GI@not@a@git@repo{%
-  \endgroup
-  \PackageWarningNoLine{gitinfo}{%
-    Current directory is not a git repository.\MessageBreak
-    \protect\gitinfo{@head} will NOT work}%
-  \GI@is@a@repo@false
-  \endinput}
+% \newcommand\GI@not@a@git@repo{%
+  % \endgroup
+  % \PackageWarningNoLine{gitinfo}{%
+    % Current directory is not a git repository.\MessageBreak
+    % \protect\gitinfo{@head} will NOT work}%
+  % \GI@is@a@repo@false
+  % \endinput}
 
 \GI@check@repo@prefix
 \InputIfFileExists{\GI@githeadinfo@file}{}{%
     \ifbool{gitInf@grumpy}{%
-        \PackageError{gitinfo}{I can't find the file `gitHeadInfo.gin`.\MessageBreak
+        \PackageError{gitinfo}{I can't find the file '\GI@githeadinfo@file'\MessageBreak
         Please check the manual (gitinfo.pdf) \MessageBreak 
-        if you need more details.}{}
+        if you need more details}{}
     }{%
-        \PackageWarning{gitInfo}{I can't find the file `gitHeadInfo.gin`.\MessageBreak
-        All git metadata has been set to ``\gitInf@missing''.}
+        \PackageWarningNoLine{gitInfo}{I can't find the file '\GI@githeadinfo@file'.\MessageBreak
+        All git metadata has been set to '\gitInf@missing'}
     }
 }
 \@ifclassloaded{memoir}{%
