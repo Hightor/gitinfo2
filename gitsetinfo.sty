@@ -68,9 +68,9 @@
 }%
 \newcommand{\git@rtag}[1]{%
     \IfEq{#1}{}{}{%
-        \StrRight{#1}{1}[\gitInf@dirtflag]
-        \StrDel{#1}{*}[\gitInf@describe]
-        \IfEq{\gitInf@dirtflag}{*}{\renewcommand{\gitDirty}{\gitInf@dirty}}{}
+        \StrRight{#1}{2}[\gitInf@dirtflag]
+        \StrDel{#1}{-*}[\gitInf@describe]
+        \IfEq{\gitInf@dirtflag}{-*}{\renewcommand{\gitDirty}{\gitInf@dirty}}{}
         \StrGobbleRight{\gitInf@describe}{9}[\gitInf@describe]%   Remove -g<hash>
         \StrCount{\gitInf@describe}{-}[\gitInf@mcount]%           Find last -
         \StrCut[\gitInf@mcount]{\gitInf@describe}{-}{\gitInf@rel}{\gitInf@off}
