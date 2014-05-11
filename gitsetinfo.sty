@@ -39,6 +39,7 @@
 \DeclareStringOption{commudate}
 \DeclareStringOption{refnames}
 \DeclareStringOption{firsttagdescribe}
+\DeclareStringOption{reltag}
 \ProcessKeyvalOptions*
 \renewcommand{\gitAbbrevHash}{\gitInf@shash}
 \renewcommand{\gitHash}{\gitInf@lhash}
@@ -65,4 +66,19 @@
 	}%
 	\expandafter\docsvlist\expandafter{#1}%
 }%
+\newcommand{\git@rtag}[1]{%
+    \IfEq{#1}{}{}{%
+        \StrRight{#1}{1}[\gitInf@dirtflag]
+        \StrDel{#1}{*}[\gitInf@describe]
+        \IfEq{\gitInfdirtflag}{*}{\renewcommand{\gitDirty}{\gitInf@dirty}}{}
+        \StrGobbleRight{\gitInf@describe}{8}[\gitInf@describe]%   Remove '-commit id'
+        \StrCount{\gitInf@describe}{-}[\gitInf@mcount]%           Find last -
+        \StrCut[\gitInf@mcount]{\gitInf@describe}{-}{\gitInf@rel}{\gitInf@off}
+        \renewcommand{\gitRel}{\gitInf@rel}
+        \renewcommand{\gitRels}{\space\gitInf@rel}
+        \renewcommand{\gitReln}{\space\gitInf@rel}
+        \renewcommand{\gitRoff}{\gitInf@off}
+    }%
+}%
 \git@vtag{\gitInf@refnames}
+\git@rtag{\gitInf@reltag}

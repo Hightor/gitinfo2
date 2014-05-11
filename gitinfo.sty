@@ -21,13 +21,15 @@
 \RequirePackage{etoolbox}
 \RequirePackage{kvoptions}
 \SetupKeyvalOptions{%
-	family=gitInfo,
-	prefix=gitInf@
-	}
+    family=gitInfo,
+    prefix=gitInf@
+    }
 \DeclareBoolOption{grumpy}
 \DeclareBoolOption{pcount}
 \DeclareBoolOption{footinfo}
 \DeclareStringOption[(None)]{missing}
+\DeclareStringOption[(dirty)]{dirty}
+\DeclareStringOption[8]{maxdepth}
 \ProcessKeyvalOptions*
 \newcommand{\gitAbbrevHash}{\gitInf@missing}
 \newcommand{\gitHash}{\gitInf@missing}
@@ -46,43 +48,96 @@
 \newcommand{\gitVtag}{}
 \newcommand{\gitVtags}{}
 \newcommand{\gitVtagn}{\space\gitInf@missing}
-\InputIfFileExists{./gitHeadInfo.gin}{}{%
-    \InputIfFileExists{../gitHeadInfo.gin}{}{%
-        \InputIfFileExists{../../gitHeadInfo.gin}{}{%
-            \ifbool{gitInf@grumpy}{%
-                \PackageError{gitinfo}{I can't find the file `gitHeadInfo.gin`.\MessageBreak
-                Please check the manual (gitinfo.pdf) \MessageBreak 
-                if you need more details.}{}
-            }{%
-                \PackageWarning{gitInfo}{I can't find the file `gitHeadInfo.gin`.\MessageBreak
-                All git metadata has been set to ``\gitInf@missing''.}
-            }
-        }
+\newcommand{\gitRtag}{}
+\newcommand{\gitRtags}{}
+\newcommand{\gitRtagn}{\space\gitInf@missing}
+\newcommand{\gitDirty}{}
+\newcommand{\gitRoff}{}
+
+% private values
+\newif\ifGI@is@a@repo@
+
+% private constants
+\newcommand\GI@repo@prefix{}
+\newcommand\GI@githeadinfo@file{\GI@repo@prefix.git/gitHeadInfo.gin}
+
+% \TeX{}nical tools
+
+\newcommand\GI@export@macro[1]{%
+  \edef\@tempa{\endgroup
+    \def\noexpand#1{#1}}%
+  \@tempa}
+  
+% finding the .git directory
+
+\newcommand\GI@check@repo@prefix{%
+  \GI@is@a@repo@true
+  \IfFileExists{./\GI@githeadinfo@file}{%
+    \edef\GI@repo@prefix{./}%
+    }{%
+    \GI@set@repo@prefix}}
+
+\newcommand\GI@set@repo@prefix{%
+  \begingroup \count@\gitInf@maxdepth\relax
+  \GI@set@repo@prefix@}
+
+\newcommand\GI@set@repo@prefix@{%
+  \advance\count@\m@ne
+  \ifnum\count@<\z@
+    \expandafter\GI@not@a@git@repo
+  \else
+    \edef\GI@repo@prefix{../\GI@repo@prefix}%
+    \IfFileExists{\GI@githeadinfo@file}{%
+  \PackageWarningNoLine{gitinfo}{%
+  GitInfo found  : \GI@githeadinfo@file \MessageBreak  
+  }%
+      \GI@export@macro\GI@githeadinfo@file
+      }{%
+      \expandafter\GI@set@repo@prefix@}%
+  \fi}
+
+\newcommand\GI@not@a@git@repo{%
+  \endgroup
+  \PackageWarningNoLine{gitinfo}{%
+    Current directory is not a git repository.\MessageBreak
+    \protect\gitinfo{@head} will NOT work}%
+  \GI@is@a@repo@false
+  \endinput}
+
+\GI@check@repo@prefix
+\InputIfFileExists{\GI@githeadinfo@file}{}{%
+    \ifbool{gitInf@grumpy}{%
+        \PackageError{gitinfo}{I can't find the file `gitHeadInfo.gin`.\MessageBreak
+        Please check the manual (gitinfo.pdf) \MessageBreak 
+        if you need more details.}{}
+    }{%
+        \PackageWarning{gitInfo}{I can't find the file `gitHeadInfo.gin`.\MessageBreak
+        All git metadata has been set to ``\gitInf@missing''.}
     }
 }
 \@ifclassloaded{memoir}{%
-	\ifbool{gitInf@footinfo}{%
-		\ifbool{gitInf@pcount}{
-			\newcommand{\@gitPage}{\thepage/\thelastpage}
-			\addtodef{\frontmatter}{\renewcommand{\@gitPage}{\thepage}}{}
-			\addtodef{\mainmatter}{}{\renewcommand{\@gitPage}{\thepage/\thelastpage}}
-		}{%
-			\newcommand{\@gitPage}{\thepage}
-		}
-		\newcommand{\@gitFootRev}{Revision\gitVtags: \gitAbbrevHash{} (\gitAuthorDate)}
-		\newcommand{\@gitrFootRev}{%
-			\tiny\textsf{\raggedleft \@gitFootRev}%
-			}
-		\newcommand{\@gitlFootRev}{%
-			\tiny\textsf{\@gitFootRev}%
-			}
-		\makeevenfoot{plain}{\@gitPage}{}{\@gitrFootRev}
-		\makeoddfoot{plain}{\@gitlFootRev}{}{\@gitPage}
-		\makeevenfoot{ruled}{\@gitPage}{}{\@gitrFootRev}
-		\makeoddfoot{ruled}{\@gitlFootRev}{}{\@gitPage}
-		\makeevenfoot{headings}{\@gitPage}{}{\@gitrFootRev}
-		\makeoddfoot{headings}{\@gitlFootRev}{}{\@gitPage}
-		\makeevenhead{headings}{}{}{\slshape\leftmark}
-		\makeoddhead{headings}{\slshape\rightmark}{}{}
-	}{}
+    \ifbool{gitInf@footinfo}{%
+        \ifbool{gitInf@pcount}{
+            \newcommand{\@gitPage}{\thepage/\thelastpage}
+            \addtodef{\frontmatter}{\renewcommand{\@gitPage}{\thepage}}{}
+            \addtodef{\mainmatter}{}{\renewcommand{\@gitPage}{\thepage/\thelastpage}}
+        }{%
+            \newcommand{\@gitPage}{\thepage}
+        }
+        \newcommand{\@gitFootRev}{Revision\gitVtags: \gitAbbrevHash{} (\gitAuthorDate)}
+        \newcommand{\@gitrFootRev}{%
+            \tiny\textsf{\raggedleft \@gitFootRev}%
+            }
+        \newcommand{\@gitlFootRev}{%
+            \tiny\textsf{\@gitFootRev}%
+            }
+        \makeevenfoot{plain}{\@gitPage}{}{\@gitrFootRev}
+        \makeoddfoot{plain}{\@gitlFootRev}{}{\@gitPage}
+        \makeevenfoot{ruled}{\@gitPage}{}{\@gitrFootRev}
+        \makeoddfoot{ruled}{\@gitlFootRev}{}{\@gitPage}
+        \makeevenfoot{headings}{\@gitPage}{}{\@gitrFootRev}
+        \makeoddfoot{headings}{\@gitlFootRev}{}{\@gitPage}
+        \makeevenhead{headings}{}{}{\slshape\leftmark}
+        \makeoddhead{headings}{\slshape\rightmark}{}{}
+    }{}
 }{}
