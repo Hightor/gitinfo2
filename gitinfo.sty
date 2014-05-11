@@ -48,9 +48,9 @@
 \newcommand{\gitVtag}{}
 \newcommand{\gitVtags}{}
 \newcommand{\gitVtagn}{\space\gitInf@missing}
-\newcommand{\gitRtag}{}
-\newcommand{\gitRtags}{}
-\newcommand{\gitRtagn}{\space\gitInf@missing}
+\newcommand{\gitRel}{}
+\newcommand{\gitRels}{}
+\newcommand{\gitReln}{\space\gitInf@missing}
 \newcommand{\gitDirty}{}
 \newcommand{\gitRoff}{}
 
@@ -58,8 +58,13 @@
 \newif\ifGI@is@a@repo@
 
 % private constants
-\newcommand\GI@repo@prefix{}
-\newcommand\GI@githeadinfo@file{\GI@repo@prefix.git/gitHeadInfo.gin}
+\newcommand{\GI@repo@prefix}{}
+\newcommand{\GI@githeadinfo@file}{\GI@repo@prefix.git/gitHeadInfo.gin}
+\newcommand{\gitInf@dirtflag}{}
+\newcommand{\gitInf@describe}{}
+\newcommand{\gitInf@mcount}{}
+\newcommand{\gitInf@rel}{}
+\newcommand{\gitInf@off}{}
 
 % \TeX{}nical tools
 

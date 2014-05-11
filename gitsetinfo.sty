@@ -70,8 +70,8 @@
     \IfEq{#1}{}{}{%
         \StrRight{#1}{1}[\gitInf@dirtflag]
         \StrDel{#1}{*}[\gitInf@describe]
-        \IfEq{\gitInfdirtflag}{*}{\renewcommand{\gitDirty}{\gitInf@dirty}}{}
-        \StrGobbleRight{\gitInf@describe}{8}[\gitInf@describe]%   Remove '-commit id'
+        \IfEq{\gitInf@dirtflag}{*}{\renewcommand{\gitDirty}{\gitInf@dirty}}{}
+        \StrGobbleRight{\gitInf@describe}{9}[\gitInf@describe]%   Remove -g<hash>
         \StrCount{\gitInf@describe}{-}[\gitInf@mcount]%           Find last -
         \StrCut[\gitInf@mcount]{\gitInf@describe}{-}{\gitInf@rel}{\gitInf@off}
         \renewcommand{\gitRel}{\gitInf@rel}
