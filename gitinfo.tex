@@ -1,4 +1,4 @@
-% gitinfo.tex   
+% gitinfo.tex
 % Copyright 2014 Brent Longborough
 %
 % This work may be distributed and/or modified under the
@@ -12,11 +12,25 @@
 % This work has the LPPL maintenance status `maintained'.
 % The Current Maintainer of this work is Brent Longborough.
 %
-% This work consists of these files: 
+% This work consists of these files:
 %     gitinfo.sty, gitsetinfo.sty, gitinfo.tex, gitinfo.pdf,
-%     gitinfotest.tex, post-git-sample.txt, and gitHeadInfo.gin
+%     gitinfotest.tex, post-git-sample.txt,
+%     and gitPseudoHeadInfo.gin
 % -----------------------------------------------------
 \documentclass[a4paper,12pt,twoside,openany]{memoir}
+% =====================================================
+% This is a tweak to allow this document to be formatted
+% even when it doesn't live in an adequately configured
+% git repository. Please do not try this at home.
+% You have been warned.
+% -----------------------------------------------------
+\makeatletter
+\newcommand{\GI@repo@prefix}{}
+\newcommand{\GI@githeadinfo@file}{\GI@repo@prefix./gitPseudoHeadInfo.gin}
+\makeatother
+% -----------------------------------------------------
+% End of tweak
+% =====================================================
 \usepackage[pcount,footinfo,grumpy]{gitinfo}
 \usepackage{tgpagella}
 \usepackage{tgadventor}

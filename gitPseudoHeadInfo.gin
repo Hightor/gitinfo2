@@ -1,0 +1,17 @@
+\usepackage[%
+        shash={062e6f8},
+        lhash={062e6f812284f85916c7293eebe8d19e04ae3227},
+        authname={Brent Longborough},
+        authemail={brent+ctancontrib@longborough.org},
+        authsdate={2014-05-11},
+        authidate={2014-05-11 22:18:22 +0100},
+        authudate={1399843102},
+        commname={Brent Longborough},
+        commemail={brent+ctancontrib@longborough.org},
+        commsdate={2014-05-11},
+        commidate={2014-05-11 22:18:22 +0100},
+        commudate={1399843102},
+        refnames={ (HEAD, tag: 2.0-beta, origin/master, localtex/master, master)},
+        firsttagdescribe={2.0-beta-*},
+        reltag={2.0-beeta-0-g062e6f8-*}
+    ]{gitsetinfo}
