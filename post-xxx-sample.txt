@@ -1,5 +1,6 @@
 #!/bin/sh
-# Copyright 2011 Brent Longborough
+# Copyright 2014 Brent Longborough
+# Part of gitinfo Version 2
 # Please read gitinfo.pdf for licencing and other details
 # -----------------------------------------------------
 # Post-{commit,checkout,merge} hook for the gitinfo package

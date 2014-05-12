@@ -35,10 +35,15 @@
 \usepackage{tgpagella}
 \usepackage{tgadventor}
 \usepackage{fontspec}
-\defaultfontfeatures{Ligatures=TeX}
-\setmainfont[Numbers={Proportional,OldStyle}]{TeX Gyre Pagella}
-\setsansfont[Numbers={Proportional,OldStyle}]{TeX Gyre Adventor}
+\setmainfont[Numbers={Proportional,OldStyle},Ligatures=TeX]{TeX Gyre Pagella}
+\setsansfont[Numbers={Proportional,OldStyle},Ligatures=TeX]{TeX Gyre Adventor}
 \setmonofont{Consolas}
+\usepackage{enumitem}
+\setlist[description]{%
+    format=\ttfamily\bfseries,
+    style=nextline,
+    leftmargin=5em,
+    itemsep=0.5\onelineskip}
 \setulmarginsandblock{0.11111\paperwidth}{0.22222\paperwidth}{*}
 \setlrmarginsandblock{0.11111\paperwidth}{0.22222\paperwidth}{*}
 \setheadfoot{1.2\baselineskip}{0.0849\paperwidth}
@@ -47,11 +52,14 @@
 \checkandfixthelayout[fixed]
 \tightlists
 \chapterstyle{bringhurst}
-\pagestyle{ruled}
+\pagestyle{empty}
+\aliaspagestyle{chapter}{empty}
 \settocdepth{section}
 \setsecnumdepth{none}
+\newcommand{\bpara}[1]{\par\vspace{\beforeparaskip}\noindent\textbf{#1}\,}
 \newcommand{\sfit}[1]{\textit{#1}}
 \newcommand{\git}{\sfit{git}}
+\newcommand*{\emailat}{@}
 \newcommand{\tpname}{\sfit{gitinfo}}
 \newcommand{\tpfname}{\textsf{gitinfo.sty}}
 \newcommand{\ginname}{gitHeadInfo.gin}
@@ -69,30 +77,34 @@
    pdfkeywords={git;metadata;dvcs},
 }
 \begin{document}
+\frontmatter
 % -----------------------------------------------------
 \title{%
 	\Huge \tpfname\\[2ex]%
 	\Large A package for accessing metadata\\from the \git\ \textsc{dvcs}
 	}
 \author{Brent Longborough}
-\date{29th August, 2011}
+\date{12th May, 2014}
 \maketitle
 
 {\centering
-Version:\gitVtagn\\
+Release:\gitReln\ (\gitAbbrevHash)\\
 }
 %\vspace*{2\baselineskip}
 % -----------------------------------------------------
 \begingroup
+\thispagestyle{empty}
 \aliaspagestyle{chapter}{empty}
 \setlength{\afterchapskip}{20pt}
 \let\clearpage\relax
 \let\chaptitlefont\Large\bfseries
 \vspace*{5\baselineskip}
 \tableofcontents*
-\clearpage
 \endgroup
 % -----------------------------------------------------
+\mainmatter
+\pagestyle{giruled}
+\aliaspagestyle{chapter}{giplain}
 \chapter{Introduction}
 More and more, writers are using version control systems
 to manage the progress of their works.
@@ -118,7 +130,7 @@ a given formatted copy was produced.
 which extracts metadata from \git\ and writes it to a \TeX\ file,
 named \metaname\ (`gin' for \textbf{g}it \textbf{in}fo).
 
-\item When you format your document, \tpname\ reads 
+\item When you format your document, \tpname\ reads
 \metaname\ and stores the metadada
 in a series of \LaTeX\ commands.
 
@@ -127,7 +139,7 @@ the metadata you need at any point in the document.
 \end{enumerate}
 
 It is important to note that \tpname\ reads the metadata
-with the equivalent of \texttt{\textbackslash input\{.git/\ginname\}} 
+with the equivalent of \texttt{\textbackslash input\{.git/\ginname\}}
 in the repository (module or submodule) root.
 
 If you actually want to use \tpname, then please read on.
@@ -136,7 +148,7 @@ in this case,
 please skip the next chapter and go on to (Using the package)
 on page \pageref{ch:using}.
 If you like what you see, you can come back to
-read (Setup) later. 
+read (Setup) later.
 
 % -----------------------------------------------------
 \chapter{Setup}
@@ -159,7 +171,7 @@ into the \git\ hooks directory in your working copy.
 In our example case, you should end up with a file called
 \texttt{\textasciitilde/compsci/.git/hooks/post-checkout}
 
-\item If you're using a unix-like system, 
+\item If you're using a unix-like system,
 don't forget to make the file executable.
 Just how you do this is outside the scope of this manual,
 but one possible way is with commands such as \verb!chmod g+x post-checkout!.
@@ -176,8 +188,81 @@ As before, users of unix-like systems should ensure these files are marked as ex
 
 If you don't want to install \tpname\ using a package manager,
 you can instead just copy the two *.sty files into your document directory.
-However, it may be simpler, for more complex project trees, 
+However, it may be simpler, for more complex project trees,
 to install the package as part of your \TeX distribution.
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\section{Migrating from version 1}
+
+Version~2 of \tpname\ simplifies setup and brings additional convenience.
+But this comes at a cost:
+existing repositories need to be upgraded to be compatible.
+This decision wasn't taken lightly; I really do think the incompatible changes
+will give us a much firmer base for the future.
+The changes needed, which should be applied to every repository, follow.
+
+\bpara{Install the new \git\ hooks.}
+Replace the hooks (\texttt{post-checkout}, \texttt{post-commit},
+and \texttt{post-merge}) with the contents of the file \texttt{post-xxx-sample.txt}.
+Since \tpname\ now uses only a single \metaname\ file for the whole repository,
+you do \emph{not} need to tailor these hooks to map your document folders.
+
+Dont forget to ensure the hooks are executable,
+if you are fortunate enough to be using a unix-like system.
+
+\bpara{Recreate the new \metaname\ file.}
+After you've replaced the hooks, the simplest way is to re-check-out the current branch.
+A simple \verb!git checkout! command should do.
+
+\bpara{Delete the old \metaname\ files,}
+when you're ready.
+
+\bpara{If you're a \sfit{memoir} user,}
+and you use the \texttt{footinfo} package option,
+you will need to adjust your page styles.
+
+From \tpname\ version~2, we no longer override the standard \sfit{memoir}
+page styles.
+Instead, \tpname\ provides three new page styles:
+\sfit{giplain}, \sfit{giruled}, and \sfit{giheadings},
+which you should now use to provide \tpname-tailored pages.
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\section{Tailoring release tags}
+
+As shipped, the \git\ hook code uses a certain convention
+for identifying `release' tags:
+the tag must begin with a numeric digit, and contain at least one decimal
+point.\footnote{I.e. full stop or period, depending on which variant of English you use.}
+
+Here is the line in the hook where this convention is established:
+
+\begin{quotation}
+{\ttfamily
+RELTAG=\$(git describe \textellipsis\ --match '[0-9]*.*' \textellipsis)
+}
+\end{quotation}
+
+By changing the \texttt{--match} parameter, you can decide exactly which tags
+qualify as `release' tags for your needs. Thus
+
+\begin{quotation}
+{\ttfamily
+RELTAG=\$(git describe \textellipsis\ --match 'R.*' \textellipsis)
+}
+\end{quotation}
+would allow you to find tags like `R.2.0.1' and `R.L.Stevenson',
+or
+
+\begin{quotation}
+{\ttfamily
+RELTAG=\$(git describe \textellipsis\ --match '*' \textellipsis)
+}
+\end{quotation}
+would allow you to find any tag whatsoever.
+
+You can change the hooks without needing to alter \tpname,
+since whatever tag is found is used as-is.
 
 % -----------------------------------------------------
 \chapter{Using the package}
@@ -194,26 +279,26 @@ The \tpname\ package is loaded in the usual way:\\[0.5\baselineskip]
 
 The following options are available:\\[0.5\baselineskip]
 
-\noindent
-\begin{tabularx}{\textwidth}{@{}>{\ttfamily\bfseries}lX@{}}
-grumpy&
+\begin{description}
+
+\item[grumpy]
 By default, If \tpname\ can't find \metaname\ (the metadata file),
 it will set all the metadata to a common value, ``(None)'',
 issue a package warning, and carry on.
 If the \texttt{grumpy} option is used,
 this warning becomes an error, and processing stops.
-\\
-\texttt{missing=\textit{text}}&
+
+\item[\texttt{missing=\textit{text}}]
 If \tpname\ can't find \metaname (the metadata file),
 it will normally set all the metadata to a default common value, ``(None)''.
 If you wish, you can change this value to something else with, say
 \texttt{missing=Help!} or \texttt{missing=\{What a mess\}}.
 
 If you have complex needs, as in the second example,
-don't forget to enclose your text in \{\}s. 
-\\
-\texttt{dirty=\textit{text}}&
-If \tpname\ detects that your working copy is dirty 
+don't forget to enclose your text in \{\}s.
+
+\item[\texttt{dirty=\textit{text}}]
+If \tpname\ detects that your working copy is dirty
 (in the git sense --- it has uncommitted changes),
 it makes this information available as a command.
 For a clean repository, the command is empty, while for a dirty repository
@@ -222,28 +307,32 @@ If you wish, you can change this value to something else with, say
 \texttt{dirty=Unclean!} or \texttt{dirty=\{This repo is grotty\}}.
 
 Again, for complex needs, as in the second example,
-don't forget to enclose your text in \{\}s. 
-\\
-footinfo&
-For \sfit{memoir} users, \tpname\ will set certain items of metadata into
-some memoir page footer categories,
-provided that (a) the memoir package is loaded,
-and (b) this option is given.
+don't forget to enclose your text in \{\}s.
 
-No warning is given, and no action taken,
-if this parameter is used with another document class.
-More detail is given below (For \textit{memoir} users).
-\\
-pcount&
-For \sfit{memoir} users, this option, when used together with \texttt{footinfo},
-will, in the affected footers, replace the folio with one of the form \textit{x/y},
+\item[\texttt{maxdepth=\textit{n}}]
+In order to locate \metapath\ in the repository root,
+\tpname\ starts in the directory containing the document being processed,
+and searches up the directory tree until it finds it.
+This search is limited to {\ttfamily\itshape n} levels --- 4 by default.
+If you are sufficiently unfortunate to have to deal with documents
+deeper in your repository tree, you can extend this limit with, say,
+{\ttfamily maxdepth=8}.
+
+\item[footinfo]
+This parameter is no longer used, and if present is silently ignored.
+For \sfit{memoir} users, \tpname\ now creates, automatically,
+three new page styles.
+More detail is given below (For \sfit{memoir} users).
+
+\item[pcount]
+For \sfit{memoir} users, this option will replace the folio
+in the new page styles with one of the form \textit{x/y},
 where \textit{x} is the folio and \textit{y} is the page count.
 
 No warning is given, and no action taken,
-if this parameter is used with another document class,
-or if the \texttt{footinfo} option is omitted.
-More detail is given below (For \textit{memoir} users).
-\end{tabularx}
+if this parameter is used with another document class.
+More detail is given below (For \sfit{memoir} users).
+\end{description}
 % - - - - - - - - - - - - - - - - - - - - - - - - - - -
 \clearpage
 \section{The metadata}
@@ -251,57 +340,71 @@ The \git\ metadata, for the current HEAD commit,
 is made available in the document
 as a series of parameter-less \LaTeX commands.
 Here they are:
-\vspace{0.5\baselineskip}
 
-\noindent
-\begin{tabularx}{\textwidth}{@{}>{\ttfamily\bfseries\textbackslash}lX@{}}
-gitAbbrevHash&
-    The seven-hex-char abbreviated commit hash
-\\
-gitHash&
-    The full 40-hex-character commit hash
-\\
-gitAuthorName&
-    The name of the author of this commit
-\\
-gitAuthorEmail&
-    The email address of the author of this commit
-\\
-gitAuthorDate&
+\begin{description}
+
+\item[gitAbbrevHash]
+    The seven-hex-char abbreviated commit hash\\
+    Example: \textit{\gitAbbrevHash}
+
+\item[gitHash]
+    The full 40-hex-character commit hash\\
+    Example: \textit{\gitHash}
+
+\item[gitAuthorName]
+    The name of the author of this commit\\
+    Example: \textit{\gitAuthorName}
+
+\item[gitAuthorEmail]
+    The email address of the author of this commit\\
+    Example: \textit{myemail\emailat evilspam.net}
+
+\item[gitAuthorDate]
     The date this change was committed by the author,
-    in the format \textit{yyyy-mm-dd}
-\\
-gitAuthorIsoDate&
+    in the format \textit{yyyy-mm-dd}\\
+    Example: \textit{\gitAuthorDate}
+
+\item[gitAuthorIsoDate]
     The date and time this change was committed by the author,
-    in ISO format, e.g. \textit{2011-08-29 13:05:54 +0100}
-\\
-gitAuthorUnixDate&
+    in ISO format\\
+    Example: \textit{\gitAuthorIsoDate}
+
+\item[gitAuthorUnixDate]
     The date and time this change was committed by the author,
-    as a Unix timestamp, e.g \textit{1314619554}
-\\
-gitCommitterName&
-    The name of the committer of this commit
-\\
-gitCommitterEmail&
-    The email address of the committer of this commit
-\\
-gitCommitterDate&
+    as a Unix timestamp\\
+    Example: \textit{\gitAuthorUnixDate}
+
+\item[gitCommitterName]
+    The name of the committer of this commit\\
+    Example: \textit{\gitCommitterName}
+
+\item[gitCommitterEmail]
+    The email address of the committer of this commit\\
+    Example: \textit{watcher\emailat gchq.gov.uk}
+
+\item[gitCommitterDate]
     The date this change was committed by the committer,
-    in the format \textit{yyyy-mm-dd}
-\\
-gitCommitterIsoDate&
+    in the format \textit{yyyy-mm-dd}\\
+    Example: \textit{\gitCommitterDate}
+
+\item[gitCommitterIsoDate]
     The date and time this change was committed by the committer,
-    in ISO format, e.g. \textit{2011-08-29 13:05:54 +0100}
-\\
-gitCommitterUnixDate&
+    in ISO format\\
+    Example: \textit{\gitCommitterIsoDate}
+
+\item[gitCommitterUnixDate]
     The date and time this change was committed by the committer,
-    as a Unix timestamp, e.g \textit{1314619554}
-\\
-gitReferences&
+    as a Unix timestamp\\
+    Example: \textit{\gitCommitterUnixDate}
+
+\item[gitReferences]
     A list of any \git\ references (tags, branches) associated
-    with this commit, e.g. \textit{ (HEAD, master)}
-\\
-\end{tabularx}
+    with this commit.
+    This string is not for the faint-hearted;
+    its format and order may vary between versions of \git.\\
+    Example: \textit{\small\gitReferences}
+
+\end{description}
 
 
 \subsection{Additional metadata (Version 1)}
@@ -311,96 +414,99 @@ experimental. \tpname\ searches the \git\ references metadata for
 anything (probably a \git\ tag) that looks like a number with a decimal point.
 The first such number it finds is taken as a ``Version Number''
 and made available in three different formats, explained here:
-\vspace{0.5\baselineskip}
 
-\noindent
-\begin{tabularx}{\textwidth}{@{}>{\ttfamily\bfseries\textbackslash}lX@{}}
-gitVtag&
+\begin{description}
+\item[gitVtag]
     The version number, without any decorations. If no version number is found,
     empty (i.e. zero width).
-\\
-gitVtags&
+\item[gitVtags]
     The version number, with a leading space. If no version number is found,
     empty.
-\\
-gitVtagn&
+\item[gitVtagn]
     The version number, with a leading space.
     If no version number is found, a space,
     followed by the default or specified value of
-    the \texttt{missing} package option.
-\\
-\end{tabularx}
+    the \texttt{missing} package option.\\
+    Example: \textit{\gitVtagn}
+\end{description}
 
-These versioning tags have been superseded by release tags in Version 2, 
-although they should continue to work as before.  
+These versioning tags have been superseded by release tags in Version 2,
+although they should continue to work as before.
 
 \subsection{Additional metadata (Version 2)}
 
-From Version 2 onwards, additional \git\ metadata is available, 
+From Version 2 onwards, additional \git\ metadata is available,
 in general improving or extending the facilities available in Version 1.
 The Version 1 metadata is retained for backward compatibility.
 
-Included is a new set of \texttt{gitRel} commands, 
-designed to replace \texttt{gitVtag} and its cousins. 
-\tpname\ searches the \git\ metadata for tags 
-on the current \textsc{head} commit or its ancestors, 
-and makes the first tag found available. 
-It also looks for the latest such tag 
-whose name begins with a digit, and which contains a full stop (period), 
-and makes the tag, and the number of commits following it, 
+Included is a new set of \texttt{gitRel} commands,
+designed to replace \texttt{gitVtag} and its cousins.
+\tpname\ searches the \git\ metadata for tags
+on the current \textsc{head} commit or its ancestors,
+and makes the first tag found available.
+It also looks for the latest such tag
+whose name begins with a digit, and which contains a full stop (period),
+and makes the tag, and the number of commits following it,
 available as a `release number'.%
-\footnote{\tpname\ doesn't check for numerics, so you can add a tag like `1.5-beta' if you wish.} 
-Here are the new commands in Version 2:
-\vspace{0.5\baselineskip}
+\footnote{\tpname\ doesn't check for numerics, so you can use a tag like `1.5-beta' if you wish.}
+Here are the new commands in Version~2:
 
-\noindent
-\begin{tabularx}{\textwidth}{@{}>{\ttfamily\bfseries\textbackslash}lX@{}}gitFirstTagDescribe&
+\begin{description}
+
+\item[gitFirstTagDescribe]
 	The last tag reachable from the current \textsc{head}.
-    This is a string in the form
-    \textit{tagname}--\textit{offset}--g\textit{commit-id}.
     Please see git-describe for more information.
-\\
-gitRel&
+    If the working copy is \textit{dirty} (has uncommitted changes),
+    the string has '-*' appended.\\
+    Example: \textit{\gitFirstTagDescribe}
+
+\item[gitRel]
     The release number, without any decorations.
     If no release number is found, empty (i.e. zero width).
-\\
-gitRels&
-    The release number, with a leading space. 
+
+\item[gitRels]
+    The release number, with a leading space.
     If no release number is found, empty.
-\\
-gitReln&
+
+\item[gitReln]
     The release number, with a leading space.
     If no release number is found, a space,
     followed by the default or specified value of
     the \texttt{missing} package option.
-\\
-gitCcount&
+
+\item[gitRoff]
     The number of commits between the tag holding the release number
     and the current \textsc{head}.
     If the tag refers to the current \textsc{head}, zero.
-\\
-\end{tabularx}
 
+\item[gitBranch]
+    The name of the current branch.
+    Depending on how you use \git,\footnote{For example, checking out unnamed branches}
+    this information may not be available,
+    and will then be shown as the default or specified value of
+    the \texttt{missing} package option.\\
+    Example: \textit{\gitBranch}
+
+\end{description}
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - -
 \section{For \sfit{memoir} users}
-If you use \sfit{memoir}, \tpname\ provides some preset page
-headers and footers for you,
-if you specify the \texttt{footinfo} option as described above.
+If you use \sfit{memoir}, \tpname\ provides you with
+three new pagestyles, based on
+\sfit{plain},\sfit{ruled}, and \sfit{headings}.
+The new pagestyles are called
+\sfit{giplain}, \sfit{giruled}, and \sfit{giheadings}.
 
-With the \texttt{footinfo} option, \tpname\ redefines
-the \sfit{plain},\sfit{ruled}, and \sfit{headings} pagestyles.
-
-For the \sfit{plain} and \sfit{ruled} pagestyles,
+For the \sfit{giplain} and \sfit{giruled} pagestyles,
 the folio is moved from the centre to the outer margin of the footer,
 and a revision stamp is placed in the inner margin.
 
-For the \sfit{headings} pagestyle,
+For the \sfit{giheadings} pagestyle,
 the folio is moved from the outer margin of the header
 to the outer margin of the footer,
 and a revision stamp is placed in the inner margin of the footer.
 
-If, as well, you use the \texttt{pcount} option, a solidus, and the page count,
+If you use the \texttt{pcount} option, a solidus, and the page count,
 are appended to the folio.
 
 The revision stamp is generated by this fragment:
@@ -412,6 +518,15 @@ The revision stamp is generated by this fragment:
 
 \noindent
 which is set at tiny in the sans-serif font.
+
+Note that, in contrast to version 1 of \tpname,
+version 2 no longer modifies the existing page styles.
+If you wish to use this facility,
+you must now select
+the appropriate \sfit{gi\textellipsis} page style explicitly.
+
+
+
 You can see an example in the footer of this page.
 % -----------------------------------------------------
 \chapter{Etc}
@@ -425,9 +540,38 @@ who rescued me from the jaws of the TeX parser by explaining
 \textbackslash expandafter.
 
 I's also like to register my thanks to the owners of the packages on which
-\tpname\ depends: etoobox, kvoptions, and xstring.
+\tpname\ depends: etoolbox, kvoptions, and xstring.
 
-The failings, of course, are all mine.
+Many people have written to me kindly
+to point out some of the defects in \tpname, and to offer code.
+I owe you all an apology for the amount of time that elapsed
+from your suggestions to the making of version~2.
+
+In some cases, I have not taken up suggestions other than as food for thought,
+in others used the code or suggestions directly, and,
+in yet others, adapted.
+I thank you all, especially for stimulating my thought processes,
+and thus, hopefully, helping to make version~2
+a whole lot better than version~1.
+
+I think I owe a special mention to Kai Mindermann, Clea Rees, and Jörg Weber
+for code and ideas which have helped
+greatly to improve the handling of \git\ references;
+and to Ross Vandegrift for enabling the deduplication of \metaname.
+
+My sincere thanks, too, to
+Adrian Burd,
+Felix Wenger,
+Johannes Hoetzer,
+Martin W Leidig,
+Michael Rans,
+Nik (of gwdg nokta de),
+Omid (of gmail nokta com),
+Robbie Morrison,
+Ryan Matlock, and
+Sasaki~Suguru.
+
+The failings, of course, I claim for my self.
 % - - - - - - - - - - - - - - - - - - - - - - - - - - -
 \section{Copyright \& licence}
 Copyright \copyright\ 2011, Brent Longborough.
@@ -444,7 +588,7 @@ version 2005/12/01 or later.
 This work has the LPPL maintenance status `maintained';
 the Current Maintainer of this work is Brent Longborough.
 
-This work consists of the files 
+This work consists of the files
 gitinfo.sty, gitsetinfo.sty, gitinfo.tex, gitinfo.pdf,
 post-git-sample.txt, and \ginname.
 
@@ -460,17 +604,3 @@ Brent Longborough\\[\baselineskip]
 and at \href{http://tex.stackexchange.com/users/344/brent-longborough}{\TeX.SE}
 % -----------------------------------------------------
 \end{document}
-
-Robbie Morrison Make exec, copy *.sty
-Kai Mindermann Use of git-describe, problems with tag parsing
-Sasaki Suguru Not used
-Nik (of gwdg.de) Make exec
-Martin W Leidig Make exec
-Michael Rans .git/gitHeadInfo.gin, hooks via ln
-Omid (of gmail.com) --dirty
-Ryan Matlock make exec
-Jörg Weber Tag parsing problem
-Ross Vandegrift Change gitHeadInfo.gin location
-Felix Wenger make exec
-Adrian Burd Tag parsing
-Johannes Hoetzer eso-foot
