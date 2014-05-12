@@ -104,14 +104,6 @@
       \expandafter\GI@set@repo@prefix@}%
   \fi}
 
-% \newcommand\GI@not@a@git@repo{%
-  % \endgroup
-  % \PackageWarningNoLine{gitinfo}{%
-    % Current directory is not a git repository.\MessageBreak
-    % \protect\gitinfo{@head} will NOT work}%
-  % \GI@is@a@repo@false
-  % \endinput}
-
 \GI@check@repo@prefix
 \InputIfFileExists{\GI@githeadinfo@file}{}{%
     \ifbool{gitInf@grumpy}{%
@@ -124,28 +116,29 @@
     }
 }
 \@ifclassloaded{memoir}{%
-    \ifbool{gitInf@footinfo}{%
-        \ifbool{gitInf@pcount}{
-            \newcommand{\@gitPage}{\thepage/\thelastpage}
-            \addtodef{\frontmatter}{\renewcommand{\@gitPage}{\thepage}}{}
-            \addtodef{\mainmatter}{}{\renewcommand{\@gitPage}{\thepage/\thelastpage}}
-        }{%
-            \newcommand{\@gitPage}{\thepage}
+    \ifbool{gitInf@pcount}{
+        \newcommand{\@gitPage}{\thepage/\thelastpage}
+        \addtodef{\frontmatter}{\renewcommand{\@gitPage}{\thepage}}{}
+        \addtodef{\mainmatter}{}{\renewcommand{\@gitPage}{\thepage/\thelastpage}}
+    }{%
+        \newcommand{\@gitPage}{\thepage}
+    }
+    \newcommand{\@gitFootRev}{Revision\gitVtags: \gitAbbrevHash{} (\gitAuthorDate)}
+    \newcommand{\@gitrFootRev}{%
+        \tiny\textsf{\raggedleft \@gitFootRev}%
         }
-        \newcommand{\@gitFootRev}{Revision\gitVtags: \gitAbbrevHash{} (\gitAuthorDate)}
-        \newcommand{\@gitrFootRev}{%
-            \tiny\textsf{\raggedleft \@gitFootRev}%
-            }
-        \newcommand{\@gitlFootRev}{%
-            \tiny\textsf{\@gitFootRev}%
-            }
-        \makeevenfoot{plain}{\@gitPage}{}{\@gitrFootRev}
-        \makeoddfoot{plain}{\@gitlFootRev}{}{\@gitPage}
-        \makeevenfoot{ruled}{\@gitPage}{}{\@gitrFootRev}
-        \makeoddfoot{ruled}{\@gitlFootRev}{}{\@gitPage}
-        \makeevenfoot{headings}{\@gitPage}{}{\@gitrFootRev}
-        \makeoddfoot{headings}{\@gitlFootRev}{}{\@gitPage}
-        \makeevenhead{headings}{}{}{\slshape\leftmark}
-        \makeoddhead{headings}{\slshape\rightmark}{}{}
-    }{}
+    \newcommand{\@gitlFootRev}{%
+        \tiny\textsf{\@gitFootRev}%
+        }
+    \copypagestyle{giplain}{plain}
+    \copypagestyle{giruled}{ruled}
+    \copypagestyle{giheadings}{headings}
+    \makeevenfoot{giplain}{\@gitPage}{}{\@gitrFootRev}
+    \makeoddfoot{giplain}{\@gitlFootRev}{}{\@gitPage}
+    \makeevenfoot{giruled}{\@gitPage}{}{\@gitrFootRev}
+    \makeoddfoot{giruled}{\@gitlFootRev}{}{\@gitPage}
+    \makeevenfoot{giheadings}{\@gitPage}{}{\@gitrFootRev}
+    \makeoddfoot{giheadings}{\@gitlFootRev}{}{\@gitPage}
+    \makeevenhead{giheadings}{}{}{\slshape\leftmark}
+    \makeoddhead{giheadings}{\slshape\rightmark}{}{}
 }{}
