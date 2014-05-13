@@ -17,7 +17,7 @@
 %     gitinfotest.tex, post-git-sample.txt,
 %     and gitPseudoHeadInfo.gin
 % -----------------------------------------------------
-\documentclass[a4paper,12pt,twoside,openany]{memoir}
+\documentclass[a4paper,12pt,twoside,openany,draft]{memoir}
 % =====================================================
 % This is a tweak to allow this document to be formatted
 % even when it doesn't live in an adequately configured
@@ -31,7 +31,7 @@
 % -----------------------------------------------------
 % End of tweak
 % =====================================================
-\usepackage[pcount,footinfo,grumpy]{gitinfo}
+\usepackage[pcount,grumpy,mark,markifdirty]{gitinfo}
 \usepackage{tgpagella}
 \usepackage{tgadventor}
 \usepackage{fontspec}
@@ -174,7 +174,11 @@ In our example case, you should end up with a file called
 \item If you're using a unix-like system,
 don't forget to make the file executable.
 Just how you do this is outside the scope of this manual,
-but one possible way is with commands such as \verb!chmod g+x post-checkout!.
+but one possible way is with commands such as this:
+
+\begin{verbatim}
+chmod g+x post-checkout.
+\end{verbatim}
 
 \item Test your setup with ``git checkout master''
 (or another suitable branch name).
@@ -201,18 +205,18 @@ This decision wasn't taken lightly; I really do think the incompatible changes
 will give us a much firmer base for the future.
 The changes needed, which should be applied to every repository, follow.
 
-\bpara{Install the new \git\ hooks.}
+\bpara{Update \git\ hooks.}
 Replace the hooks (\texttt{post-checkout}, \texttt{post-commit},
 and \texttt{post-merge}) with the contents of the file \texttt{post-xxx-sample.txt}.
 Since \tpname\ now uses only a single \metaname\ file for the whole repository,
 you do \emph{not} need to tailor these hooks to map your document folders.
 
-Dont forget to ensure the hooks are executable,
-if you are fortunate enough to be using a unix-like system.
+If you are fortunate enough to be using a unix-like system,
+don't forget to ensure the hooks are executable.
 
 \bpara{Recreate the new \metaname\ file.}
-After you've replaced the hooks, the simplest way is to re-check-out the current branch.
-A simple \verb!git checkout! command should do.
+After you've replaced the hooks, the simplest way is to re-check-out the current branch,
+using a command such as \verb!git checkout!.
 
 \bpara{Delete the old \metaname\ files,}
 when you're ready.
@@ -277,7 +281,9 @@ The \tpname\ package is loaded in the usual way:\\[0.5\baselineskip]
 % - - - - - - - - - - - - - - - - - - - - - - - - - - -
 \section{Package options}
 
-The following options are available:\\[0.5\baselineskip]
+The following options are available:
+
+\subsection{General options}
 
 \begin{description}
 
@@ -290,20 +296,31 @@ this warning becomes an error, and processing stops.
 
 \item[\texttt{missing=\textit{text}}]
 If \tpname\ can't find \metaname (the metadata file),
-it will normally set all the metadata to a default common value, ``(None)''.
-If you wish, you can change this value to something else with, say
+or some particular item of metadata,
+it will normally set the metadata to a default common value, ``(None)''.
+You can change this value to something else with, say
 \texttt{missing=Help!} or \texttt{missing=\{What a mess\}}.
 
 If you have complex needs, as in the second example,
+don't forget to enclose your text in \{\}s.
+
+\item[\texttt{notags=\textit{text}}]
+If \tpname\ can't find any tags in the \git\ references,
+it will normally set the tag list to a default value, ``(None)''.
+You can change this value to something else with, say
+\texttt{missing=\{They stole my tags.\}} or 
+\texttt{notags=HelpNoTags!}. 
+
+Again, for complex needs, as in the first example,
 don't forget to enclose your text in \{\}s.
 
 \item[\texttt{dirty=\textit{text}}]
 If \tpname\ detects that your working copy is dirty
 (in the git sense --- it has uncommitted changes),
 it makes this information available as a command.
-For a clean repository, the command is empty, while for a dirty repository
+For a clean repository, this is empty, while for a dirty repository
 it provides the default text ``(*)''.
-If you wish, you can change this value to something else with, say
+You can change this value to something else with, say
 \texttt{dirty=Unclean!} or \texttt{dirty=\{This repo is grotty\}}.
 
 Again, for complex needs, as in the second example,
@@ -314,12 +331,47 @@ In order to locate \metapath\ in the repository root,
 \tpname\ starts in the directory containing the document being processed,
 and searches up the directory tree until it finds it.
 This search is limited to {\ttfamily\itshape n} levels --- 4 by default.
-If you are sufficiently unfortunate to have to deal with documents
+If have to deal with documents
 deeper in your repository tree, you can extend this limit with, say,
 {\ttfamily maxdepth=8}.
 
+\end{description}
+
+\subsection{Options for watermarking}
+
+These options allow you to place a watermark of \git\ metadata, 
+at the bottom of the paper, conditionally or unconditionally
+
+\begin{description}
+
+\item[mark]
+This option causes \tpname\ to generate a watermark, 
+centred at the bottom of each sheet,
+containing `useful' \git\ metadata. 
+The watermark is always added.
+
+\item[markifdraft]
+This option is like {\ttfamily\bfseries mark,}
+but only activates the watermark if the document is being processed
+with the {\ttfamily\bfseries draft} option. 
+
+\item[markifdirty]
+This option is like {\ttfamily\bfseries mark,}
+but only activates the watermark if the last commit or checkout left 
+uncommitted changes in the repository.
+
+\item[draft]
+This option \emph{should not be used;} it only exists to `capture' the 
+{\ttfamily\bfseries draft} option from the document class definition.
+
+\end{description}
+
+\subsection{Options for \sfit{memoir} users}
+
+\begin{description}
+
 \item[footinfo]
-This parameter is no longer used, and if present is silently ignored.
+This option is no longer used, and if present is silently ignored.
 For \sfit{memoir} users, \tpname\ now creates, automatically,
 three new page styles.
 More detail is given below (For \sfit{memoir} users).
@@ -402,7 +454,20 @@ Here they are:
     with this commit.
     This string is not for the faint-hearted;
     its format and order may vary between versions of \git.\\
-    Example: \textit{\small\gitReferences}
+    Example:\\\textit{\small\gitReferences}
+
+\item[gitBranch]
+    The name of the current branch.
+    Depending on how you use \git,\footnote{For example, checking out unnamed branches}
+    this information may not be available,
+    and will then be shown as the default or specified value of
+    the \texttt{missing} package option.\\
+    Example: \textit{\gitBranch}
+
+\item[gitDirty]
+    If the last commit or checkout left uncommitted changes in the working tree,
+    the default or specified value of the \texttt{dirty} package option; 
+    otherwise empty.
 
 \end{description}
 
@@ -417,7 +482,7 @@ and made available in three different formats, explained here:
 
 \begin{description}
 \item[gitVtag]
-    The version number, without any decorations. If no version number is found,
+    The version number, without decorations. If no version number is found,
     empty (i.e. zero width).
 \item[gitVtags]
     The version number, with a leading space. If no version number is found,
@@ -475,21 +540,80 @@ Here are the new commands in Version~2:
     the \texttt{missing} package option.
 
 \item[gitRoff]
-    The number of commits between the tag holding the release number
-    and the current \textsc{head}.
+    The number of commits between the current \textsc{head}
+    and the tag holding the release number.
     If the tag refers to the current \textsc{head}, zero.
 
-\item[gitBranch]
-    The name of the current branch.
-    Depending on how you use \git,\footnote{For example, checking out unnamed branches}
-    this information may not be available,
-    and will then be shown as the default or specified value of
-    the \texttt{missing} package option.\\
-    Example: \textit{\gitBranch}
+\item[gitTags]
+    A comma-separated list of tags associated with the current \textsc{head}.\\
+    Example: \textit{\gitTags}
+
+\item[gitDescribe]
+    The raw output from the git-describe command for the last release tag
+    reachable from the current \textsc{head}, including tag name, commit offset, 
+    short hash, and a dirty flag.
+    Please see git-describe for more information.
+    Example: \textit{\gitDescribe}
+
+\end{description}
+
+\clearpage
+\subsection{Watermark tailoring commands}
+
+If you use the Version 2 options to place a watermark,
+you can tailor the format of the watermark to suit your needs,
+by redefining one or more of the following commands.
+
+\begin{description}
+
+\item[gitMark]
+    Contains the text of the watermark. 
+    Output from the default definition can be seen
+    below the footer
+    at the bottom of this page.
+    The definition, split onto three lines to fit, is:
+
+\begin{verbatim}
+Branch: \gitBranch\,@\,\gitAbbrevHash{} / 
+Release:\gitReln{} (\gitAuthorDate)\\
+Head tags: \gitTags
+\end{verbatim}
+
+You can tailor this by redefining \verb!\gitMark!. 
+For example: 
+
+\begin{verbatim}
+\renewcommand{\gitMark}{\gitHash\hfill\gitRel}
+\end{verbatim}
+
+\item[gitMarkFormat]
+    Defines typesetting parameters for the whole watermark.
+    The default definition is:
+
+\begin{verbatim}
+\color{gray}\small\sffamily
+\end{verbatim}
+You can tailor this by redefining \verb!\gitMarkFormat!. For example: 
+
+\begin{verbatim}
+\renewcommand{\gitMarkFormat}{\color(red)\ttfamily}
+\end{verbatim}
+
+\item[gitMarkPref]
+    Contains the text of the watermark prefix, 
+    which depends on the reason the document is being watermarked.
+    is being printed.
+    The default values are \sfit{[Dirty]}, \sfit{[Draft]}, or \sfit{[git]}.
+    You can tailor this by redefining \verb!\gitMarkPref!. For example: 
+
+\begin{verbatim}
+\renewcommand{\gitMarkPref}{[Pending review]}
+\end{verbatim}
 
 \end{description}
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\clearpage
 \section{For \sfit{memoir} users}
 If you use \sfit{memoir}, \tpname\ provides you with
 three new pagestyles, based on
@@ -519,15 +643,14 @@ The revision stamp is generated by this fragment:
 \noindent
 which is set at tiny in the sans-serif font.
 
-Note that, in contrast to version 1 of \tpname,
+ote that, in contrast to version 1 of \tpname,
 version 2 no longer modifies the existing page styles.
 If you wish to use this facility,
 you must now select
 the appropriate \sfit{gi\textellipsis} page style explicitly.
 
-
-
-You can see an example in the footer of this page.
+You can see an example in the footer of this page, 
+above the \tpname\ watermark.
 % -----------------------------------------------------
 \chapter{Etc}
 \section{Acknowledgements \& dependencies}
