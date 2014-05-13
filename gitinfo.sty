@@ -63,7 +63,7 @@
 \newcommand{\gitDirty}{}
 \newcommand{\gitRoff}{}
 \newcommand{\gitDescribe}{(None)}
-\newcommand{\gitMarkPref}{git}
+\newcommand{\gitMarkPref}{[git]}
 \newcommand{\gitMarkFormat}{\color{gray}\small\sffamily}
 \newcommand{\gitMark}{}
 
@@ -156,13 +156,13 @@
 \ifbool{gitInf@markifdirty}{%
     \IfEq{\gitDirty}{}{}{%
         \booltrue{gitInf@mark}
-        \renewcommand{\gitMarkPref}{Dirty}
+        \renewcommand{\gitMarkPref}{[Dirty]}
     }%
 }{}%
 \ifbool{gitInf@markifdraft}{%
     \ifbool{gitInf@draft}{%
         \booltrue{gitInf@mark}
-        \renewcommand{\gitMarkPref}{Draft}
+        \renewcommand{\gitMarkPref}{[Draft]}
     }{}%
 }{}%
 \ifbool{gitInf@mark}{%
@@ -172,7 +172,7 @@
             \makebox[\paperwidth]{%
                 \begin{minipage}{\paperwidth}%
                     \renewcommand{\baselinestretch}{1}%
-                    \centering{\gitMarkFormat [\gitMarkPref{}] \gitMark}%
+                    \centering{\gitMarkFormat\gitMarkPref{} \gitMark}%
                 \end{minipage}%
             }%
         }%
