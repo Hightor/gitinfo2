@@ -21,13 +21,18 @@
 \ProvidesPackage{gitinfo}[2014/05/12 v2.00 git revision information]
 \RequirePackage{etoolbox}
 \RequirePackage{kvoptions}
+\RequirePackage{eso-pic}
 \SetupKeyvalOptions{%
     family=gitInfo,
     prefix=gitInf@
     }
+\DeclareBoolOption{draft}
 \DeclareBoolOption{grumpy}
 \DeclareBoolOption{pcount}
 \DeclareBoolOption{footinfo}
+\DeclareBoolOption{mark}
+\DeclareBoolOption{markifdraft}
+\DeclareBoolOption{markifdirty}
 \DeclareStringOption[(None)]{missing}
 \DeclareStringOption[(*)]{dirty}
 \DeclareStringOption[4]{maxdepth}
@@ -44,6 +49,7 @@
 \newcommand{\gitCommitterDate}{\gitInf@missing}
 \newcommand{\gitCommitterIsoDate}{\gitInf@missing}
 \newcommand{\gitCommitterUnixDate}{\gitInf@missing}
+\newcommand{\gitTags}{}
 \newcommand{\gitFirstTagDescribe}{\gitInf@missing}
 \newcommand{\gitReferences}{\gitInf@missing}
 \newcommand{\gitBranch}{\gitInf@missing}
@@ -56,6 +62,9 @@
 \newcommand{\gitDirty}{}
 \newcommand{\gitRoff}{}
 \newcommand{\gitDescribe}{(None)}
+\newcommand{\gitMarkPref}{git}
+\newcommand{\gitMarkFormat}{\color{gray}\small\sffamily}
+\newcommand{\gitMark}{}
 
 % private values
 \newif\ifGI@is@a@repo@
@@ -143,3 +152,29 @@
     \makeevenhead{giheadings}{}{}{\slshape\leftmark}
     \makeoddhead{giheadings}{\slshape\rightmark}{}{}
 }{}
+\ifbool{gitInf@markifdirty}{%
+    \IfEq{\gitDirty}{}{}{%
+        \booltrue{gitInf@mark}
+        \renewcommand{\gitMarkPref}{Dirty}
+    }%
+}{}%
+\ifbool{gitInf@markifdraft}{%
+    \ifbool{gitInf@draft}{%
+        \booltrue{gitInf@mark}
+        \renewcommand{\gitMarkPref}{Draft}
+    }{}%
+}{}%
+\ifbool{gitInf@mark}{%
+    \AddToShipoutPictureBG{%
+        \AtPageLowerLeft{%
+        \raisebox{15pt}{%
+            \makebox[\paperwidth]{%
+                \begin{minipage}{\paperwidth}%
+                    \renewcommand{\baselinestretch}{1}%
+                    \centering{\gitMarkFormat [\gitMarkPref{}] \gitMark}%
+                \end{minipage}%
+            }%
+        }%
+        }%
+    }%
+}{}%

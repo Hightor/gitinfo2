@@ -12,10 +12,13 @@
 % -----------------------------------------------------
 % End of tweak
 % =====================================================
-\usepackage[missing={(Oh my!)},dirty={Oh no!}]{gitinfo}
+\usepackage[missing={(Oh my!)},dirty={Oh no!},markifdirty]{gitinfo}
 \frenchspacing
 \begin{document}
+
 \ttfamily
+!\gitMark! Mark
+
 !\gitReferences ! References
 
 !\gitVtag ! Vtag
@@ -33,6 +36,8 @@
 !\gitFirstTagDescribe ! F.T.Describe
 
 !\gitDescribe ! Describe
+
+!\gitTags ! Tags
 
 !\gitDirty ! Dirty
 

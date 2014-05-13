@@ -58,28 +58,46 @@
 \renewcommand{\gitReferences}{\gitInf@refnames}
 \newcommand{\git@vtag}[1]{%
     \def\do##1{%
-        \StrCut{##1}{: }\lcut\rcut%
+        \StrCut{##1}{tag: }\lcut\rcut%
+        \IfEq{\rcut}{}{%
+            \IfDecimal{\lcut}{% case where we have decimal e.g. 1.0
+                \renewcommand{\gitVtag}{\lcut}
+                \renewcommand{\gitVtags}{\space\lcut}
+                \renewcommand{\gitVtagn}{\space\lcut}
+                \listbreak
+            }{}%
+        }{%
             \IfDecimal\rcut{% case where we have string: decimal e.g. tag: 1.0
-            \renewcommand{\gitVtag}{\rcut}
-            \renewcommand{\gitVtags}{\space\rcut}
-            \renewcommand{\gitVtagn}{\space\rcut}
-            \listbreak
-        }{}%
-        \IfDecimal{##1}{% case where we have decimal e.g. 1.0
-            \renewcommand{\gitVtag}{##1}
-            \renewcommand{\gitVtags}{\space##1}
-            \renewcommand{\gitVtagn}{\space##1}
-            \listbreak
-        }{}%
+                \renewcommand{\gitVtag}{\rcut}
+                \renewcommand{\gitVtags}{\space\rcut}
+                \renewcommand{\gitVtagn}{\space\rcut}
+                \listbreak
+            }{}%
+        }%
     }%
     \expandafter\docsvlist\expandafter{#1}%
-    \StrDel{#1}{)}[\lcut]%
-    \StrDel{\lcut}{(HEAD}[\lcut]%
-    \StrCount{\lcut}{, }[\xcut]%
-    \StrCut[\xcut]{\lcut}{, }{\lcut}{\xcut}%
+    \StrDel{#1}{)}[\bcut]%
+    \StrDel{\bcut}{(HEAD}[\bcut]%
+    \StrCount{\bcut}{, }[\xcut]%
+    \StrCut[\xcut]{\bcut}{, }{\bcut}{\xcut}%
     \IfEq{\xcut}{}{}{%
         \renewcommand{\gitBranch}{\xcut}%
     }%
+}%
+\newcommand{\git@taglist}[1]{%
+    \def\do##1{%
+        \StrCut{##1}{tag: }\llcut\rrcut%
+        \IfEq{\rrcut}{}{%
+            \IfDecimal{\llcut}{% case where we have decimal e.g. 1.0
+                \StrGobbleLeft{\gitTags,\space\llcut}{0}[\gitTags]
+            }{}%
+        }{%
+        \StrGobbleLeft{\gitTags,\space\rrcut}{0}[\gitTags]
+        }%
+    }%
+    \expandafter\docsvlist\expandafter{#1}%
+    \StrGobbleLeft{\gitTags}{2}[\gitTags]
+    \IfEq{\gitTags}{}{\renewcommand{\gitTags}{\gitInf@missing}}{}
 }%
 \newcommand{\git@rtag}[1]{%
     \IfEq{#1}{}{}{%
@@ -97,4 +115,6 @@
     }%
 }%
 \git@vtag{\gitInf@refnames}
+\git@taglist{\gitInf@refnames}
 \git@rtag{\gitInf@reltag}
+\renewcommand{\gitMark}{Branch: \gitBranch\,@\,\gitAbbrevHash{} / Release:\gitReln{} (\gitAuthorDate) / Tags: \gitTags}
