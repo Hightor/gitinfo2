@@ -97,7 +97,7 @@
     }%
     \expandafter\docsvlist\expandafter{#1}%
     \StrGobbleLeft{\gitTags}{2}[\gitTags]
-    \IfEq{\gitTags}{}{\renewcommand{\gitTags}{\gitInf@missing}}{}
+    \IfEq{\gitTags}{}{\renewcommand{\gitTags}{\gitInf@notags}}{}
 }%
 \newcommand{\git@rtag}[1]{%
     \IfEq{#1}{}{}{%
