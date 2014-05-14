@@ -1,4 +1,4 @@
-% gitinfo.tex
+% gitinfo2.tex
 % Copyright 2014 Brent Longborough
 %
 % This work may be distributed and/or modified under the
@@ -13,7 +13,7 @@
 % The Current Maintainer of this work is Brent Longborough.
 %
 % This work consists of these files:
-%     gitinfo.sty, gitsetinfo.sty, gitinfo.tex, gitinfo.pdf,
+%     gitinfo2.sty, gitexinfo.sty, gitinfo2.tex, gitinfo2.pdf,
 %     gitinfotest.tex, post-git-sample.txt,
 %     and gitPseudoHeadInfo.gin
 % -----------------------------------------------------
@@ -31,7 +31,7 @@
 % -----------------------------------------------------
 % End of tweak
 % =====================================================
-\usepackage[pcount,grumpy,mark,markifdirty]{gitinfo}
+\usepackage[pcount,grumpy,mark,markifdirty]{gitinfo2}
 \usepackage{tgpagella}
 \usepackage{tgadventor}
 \usepackage{fontspec}
@@ -60,8 +60,8 @@
 \newcommand{\sfit}[1]{\textit{#1}}
 \newcommand{\git}{\sfit{git}}
 \newcommand*{\emailat}{@}
-\newcommand{\tpname}{\sfit{gitinfo}}
-\newcommand{\tpfname}{\textsf{gitinfo.sty}}
+\newcommand{\tpname}{\sfit{gitinfo2}}
+\newcommand{\tpfname}{\textsf{gitinfo2.sty}}
 \newcommand{\ginname}{gitHeadInfo.gin}
 \newcommand{\metaname}{\texttt{\ginname}}
 \newcommand{\metapath}{\texttt{.git/\ginname}}
@@ -73,7 +73,7 @@
 	]{hyperref}
 \hypersetup{
    pdfauthor={Brent Longborough},
-   pdftitle={The gitinfo package: git metadata for LaTeX},
+   pdftitle={The gitinfo2 package: git metadata for LaTeX},
    pdfkeywords={git;metadata;dvcs},
 }
 \begin{document}
@@ -276,7 +276,7 @@ merge, or checkout to drive them,
 you can start incorporating the metadata into your document.
 
 The \tpname\ package is loaded in the usual way:\\[0.5\baselineskip]
-\texttt{\textbackslash usepackage[$<options>$]\{gitinfo\}}
+\texttt{\textbackslash usepackage[$<options>$]\{gitinfo2\}}
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - -
 \section{Package options}
@@ -677,10 +677,11 @@ I thank you all, especially for stimulating my thought processes,
 and thus, hopefully, helping to make version~2
 a whole lot better than version~1.
 
-I think I owe a special mention to Clea Rees, Jörg Weber, and Kai Mindermann
-for code and ideas which have helped
-greatly to improve the handling of \git\ references;
-and to Michael Rans and Ross Vandegrift for enabling 
+I think I owe a special mention, both for ideas and code,
+to Clea Rees, Jörg Weber, and Kai Mindermann
+for improving the handling of \git\ references;
+to Jörg Weber for watermarking;
+and to Michael Rans and Ross Vandegrift for 
 the deduplication of \metaname.
 
 My sincere thanks, too, to
@@ -712,7 +713,7 @@ This work has the LPPL maintenance status `maintained';
 the Current Maintainer of this work is Brent Longborough.
 
 This work consists of the files
-gitinfo.sty, gitsetinfo.sty, gitinfo.tex, gitinfo.pdf,
+gitinfo2.sty, gitexinfo.sty, gitinfo2.tex, gitinfo2.pdf,
 post-git-sample.txt, and \ginname.
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - -

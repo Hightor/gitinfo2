@@ -1,4 +1,4 @@
-% gitinfo.sty
+% gitinfo2.sty
 % Copyright 2014 Brent Longborough
 %
 % This work may be distributed and/or modified under the
@@ -13,17 +13,17 @@
 % The Current Maintainer of this work is Brent Longborough.
 %
 % This work consists of these files:
-%     gitinfo.sty, gitsetinfo.sty, gitinfo.tex, gitinfo.pdf,
-%     gitinfotest.tex, post-git-sample.txt,
+%     gitinfo2.sty, gitexinfo.sty, gitinfo2.tex, gitinfo2.pdf,
+%     gitinfo2test.tex, post-git-sample.txt,
 %     and gitPseudoHeadInfo.gin
 % -----------------------------------------------------
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{gitinfo}[2014/05/12 v2.00 git revision information]
+\ProvidesPackage{gitinfo2}[2014/05/12 v2.00 git revision information]
 \RequirePackage{etoolbox}
 \RequirePackage{kvoptions}
 \RequirePackage{eso-pic}
 \SetupKeyvalOptions{%
-    family=gitInfo,
+    family=gitinfo,
     prefix=gitInf@
     }
 \DeclareBoolOption{draft}
@@ -107,8 +107,8 @@
   \else
     \edef\GI@repo@prefix{../\GI@repo@prefix}%
     \IfFileExists{\GI@githeadinfo@file}{%
-  \PackageWarningNoLine{gitinfo}{%
-  GitInfo found  : \GI@githeadinfo@file \MessageBreak
+  \PackageWarningNoLine{gitinfo2}{%
+  gitinfo2 found  : \GI@githeadinfo@file \MessageBreak
   }%
       \GI@export@macro\GI@githeadinfo@file
       }{%
@@ -118,11 +118,11 @@
 \GI@check@repo@prefix
 \InputIfFileExists{\GI@githeadinfo@file}{}{%
     \ifbool{gitInf@grumpy}{%
-        \PackageError{gitinfo}{I can't find the file '\GI@githeadinfo@file'\MessageBreak
-        Please check the manual (gitinfo.pdf) \MessageBreak
+        \PackageError{gitinfo2}{I can't find the file '\GI@githeadinfo@file'\MessageBreak
+        Please check the manual (gitinfo2.pdf) \MessageBreak
         if you need more details}{}
     }{%
-        \PackageWarningNoLine{gitInfo}{I can't find the file '\GI@githeadinfo@file'.\MessageBreak
+        \PackageWarningNoLine{gitinfo2}{I can't find the file '\GI@githeadinfo@file'.\MessageBreak
         All git metadata has been set to '\gitInf@missing'}
     }
 }
