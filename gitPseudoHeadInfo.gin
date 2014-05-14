@@ -12,6 +12,6 @@
         commidate={2014-05-14 15:03:42 +0100},
         commudate={1400076222},
         refnames={ (HEAD, tag: 2.0, release/2.0)},
-        firsttagdescribe={2.0-*},
+        firsttagdescribe={2.0},
         reltag={2.0-0-g5c264bd-*}
     ]{gitexinfo}

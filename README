@@ -1,5 +1,5 @@
     The `gitinfo2' package allows version control metadata to be
-incorporated into LaTeX documents. The metadata is obtained from the
+incorporated into LaTeX documents; the metadata is obtained from the
 git distributed version control system.
     For `memoir' users, the package provides additional page styles
 (headers and footers) with selected metadata.
