@@ -125,6 +125,9 @@
         All git metadata has been set to '\gitInf@missing'}
     }
 }
+% ---------------------------------------------------------------------
+% Memoir support
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 \@ifclassloaded{memoir}{%
     \ifbool{gitInf@pcount}{
         \newcommand{\@gitPage}{\thepage/\thelastpage}
@@ -136,10 +139,10 @@
     \newcommand{\@gitFootRev}{Release\gitRels: \gitAbbrevHash{} (\gitAuthorDate)}
     \newcommand{\@gitrFootRev}{%
         \tiny\textsf{\raggedleft \@gitFootRev}%
-        }
+        }%
     \newcommand{\@gitlFootRev}{%
         \tiny\textsf{\@gitFootRev}%
-        }
+        }%
     \copypagestyle{giplain}{plain}
     \copypagestyle{giruled}{ruled}
     \copypagestyle{giheadings}{headings}
@@ -151,7 +154,10 @@
     \makeoddfoot{giheadings}{\@gitlFootRev}{}{\@gitPage}
     \makeevenhead{giheadings}{}{}{\slshape\leftmark}
     \makeoddhead{giheadings}{\slshape\rightmark}{}{}
-}{}
+}{}%
+% ---------------------------------------------------------------------
+% Watermarking
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 \ifbool{gitInf@markifdirty}{%
     \IfEq{\gitDirty}{}{}{%
         \booltrue{gitInf@mark}
