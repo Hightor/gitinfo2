@@ -30,6 +30,7 @@
 \DeclareBoolOption{mark}
 \DeclareBoolOption{markifdraft}
 \DeclareBoolOption{markifdirty}
+\DeclareBoolOption{marknotags}
 \DeclareStringOption[(None)]{missing}
 \DeclareStringOption[(None)]{notags}
 \DeclareStringOption[(*)]{dirty}
@@ -165,9 +166,9 @@
 \ifbool{gitInf@mark}{%
     \AddToShipoutPictureBG{%
         \AtPageLowerLeft{%
-        \raisebox{15pt}{%
+        \raisebox{0.5\baselineskip}{%
             \makebox[\paperwidth]{%
-                \begin{minipage}{\paperwidth}%
+                \begin{minipage}[b]{\paperwidth}%
                     \renewcommand{\baselinestretch}{1}%
                     \centering{\gitMarkFormat\gitMarkPref{} \gitMark}%
                 \end{minipage}%
