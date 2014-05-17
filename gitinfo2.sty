@@ -184,3 +184,15 @@
         }%
     }%
 }{}%
+% ---------------------------------------------------------------------
+% Datetime integration
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\@ifpackageloaded{datetime}{%
+    \IfEq{\gitAuthorDate}{\gitInf@missing}{%
+        \newdate{gitdate}{\THEDAY}{\THEMONTH}{\THEYEAR}
+    }{%
+        \StrCut{\gitAuthorDate}{-}{\gitInf@year}{\gitInf@md}
+        \StrCut{\gitInf@md}{-}{\gitInf@month}{\gitInf@day}
+        \newdate{gitdate}{\gitInf@day}{\gitInf@month}{\gitInf@year}
+    }    
+}{}%

@@ -31,6 +31,8 @@
 % -----------------------------------------------------
 % End of tweak
 % =====================================================
+\usepackage[nodayofweek]{datetime}
+\longdate{}
 \usepackage[pcount,grumpy,mark,markifdirty]{gitinfo2}
 \usepackage{tgpagella}
 \usepackage{tgadventor}
@@ -86,7 +88,7 @@
 	\Large A package for accessing metadata\\from the \git\ \textsc{dvcs}
 	}
 \author{Brent Longborough}
-\date{12th May, 2014}
+\date{\displaydate{gitdate}}
 \maketitle
 
 {\centering
@@ -697,6 +699,20 @@ explicitly.
 
 You can see an example in the footer of this page, 
 above the \tpname\ watermark.
+% - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\section{For \sfit{datetime} users}
+\label{sect:dtuser}
+If you use Nicola Talbot's excellent \sfit{datetime} package, 
+\tpname\ creates a new date object named \sfit{gitdate}, 
+which you can then refer to with other \sfit{datetime}
+functions. 
+
+Please refer to the \sfit{datetime} manual for
+further details, 
+especially in the section entitled `Saving Dates'. 
+
+If you use it, you must load \sfit{datetime} 
+before you load \tpname. 
 % -----------------------------------------------------
 \chapter{Etc}
 \section{Acknowledgements \& dependencies}
