@@ -35,7 +35,7 @@
 \DeclareStringOption[(None)]{notags}
 \DeclareStringOption[(*)]{dirty}
 \DeclareStringOption[4]{maxdepth}
-\DeclareStringOption[1.5]{raisemark}
+\DeclareStringOption[1.5\baselineskip]{raisemark}
 \ProcessKeyvalOptions*
 \newcommand{\gitAbbrevHash}{\gitInf@missing}
 \newcommand{\gitHash}{\gitInf@missing}
@@ -167,7 +167,7 @@
 \ifbool{gitInf@mark}{%
     \AddToShipoutPictureBG{%
         \AtPageLowerLeft{%
-        \raisebox{\gitInf@raisemark\baselineskip}{%
+        \raisebox{\gitInf@raisemark}{%
             \makebox[\paperwidth]{%
                 \begin{minipage}[b]{\paperwidth}%
                     \renewcommand{\baselinestretch}{1}%

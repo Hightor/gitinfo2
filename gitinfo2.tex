@@ -17,7 +17,7 @@
 %     gitinfotest.tex, post-git-sample.txt,
 %     and gitPseudoHeadInfo.gin
 % -----------------------------------------------------
-\documentclass[a4paper,12pt,twoside,openany]{memoir}
+\documentclass[draft,a4paper,12pt,twoside,openany]{memoir}
 % =====================================================
 % This is a tweak to allow this document to be formatted
 % even when it doesn't live in an adequately configured
@@ -329,36 +329,19 @@ issue a package warning, and carry on.
 If the \texttt{grumpy} option is used,
 this warning becomes an error, and processing stops.
 
-\item[\texttt{missing=\textit{text}}]
-If \tpname\ can't find \metaname\ (the metadata file),
-or any other particular item of metadata,
-it will normally set the metadata to a default common value, ``(None)''.
-You can change this value to something else with, say
-\texttt{missing=\{What a mess\}} or \texttt{missing=Help!}.
+\item[\texttt{missing=\textit{text}, notags=\textit{text}, dirty=\textit{text}}]
+These three options allow you to tailor the default text used by \tpname\ when
+metadata is missing `(None)', 
+the branch head has no tags `(None)', 
+and the working copy has uncommitted changes `(*)'.
+For example:
 
-If you have complex needs, as in the first example,
-don't forget to enclose your text in \{\}s.
-
-\item[\texttt{notags=\textit{text}}]
-If \tpname\ can't find any tags in the \git\ references,
-it will normally set the tag list to a default value, ``(None)''.
-You can change this value to something else with, say
-\texttt{missing=\{They stole my tags.\}} or 
-\texttt{notags=HelpNoTags!}. 
-
-Again, for complex needs, as in the first example,
-don't forget to enclose your text in \{\}s.
-
-\item[\texttt{dirty=\textit{text}}]
-If \tpname\ detects that your working copy is dirty
-(in the git sense --- it has uncommitted changes),
-it makes this information available as a command.
-For a clean repository, this is empty, while for a dirty repository
-it provides the default text ``(*)''.
-You can change this value to something else with, say
-\texttt{dirty=Unclean!} or \texttt{dirty=\{This repo is grotty\}}.
-
-Again, for complex needs, as in the second example,
+\begin{quote}
+{\ttfamily
+[missing=Help!,notags=\{No tags?\},dirty=Yuck]
+}
+\end{quote}
+If you have complex needs, as in the second example,
 don't forget to enclose your text in \{\}s.
 
 \item[\texttt{maxdepth=\textit{n}}]
@@ -371,7 +354,7 @@ deeper in your repository tree, you can extend this limit with, say,
 {\ttfamily maxdepth=8}.
 
 \end{description}
-
+\clearpage
 \subsection{Options for watermarking}
 
 These options allow you to place a watermark of \git\ metadata, 
@@ -401,6 +384,22 @@ it suppresses the second line of the watermark.
 If, however, you would like the second line always to appear,
 add this option to the package options.
 
+\item[raisemark=\textit{vertical space}]
+By default, \tpname\ sets the bottom line of the watermark
+at 1.5 baseline 
+skips\footnote{\texttt{1.5\textbackslash{}baselineskip}, an admittedly arbitrary value, chosen for my Canon printer.} 
+above the bottom of the paper.
+If you prefer something different, 
+you can specify it here.
+For example:
+
+\begin{quote}
+{\ttfamily
+[raisemark=0.95\textbackslash{}paperheight]
+}
+\end{quote}
+
+
 \item[draft]
 This option \emph{should not be used;} it only exists to `capture' the 
 {\ttfamily\bfseries draft} option from the document class definition.
@@ -409,9 +408,11 @@ This option \emph{should not be used;} it only exists to `capture' the
 
 \subsection{Options for \sfit{memoir} users}
 
-For additional information, the use of these options is described in more detail in
+For more about these options, 
+please read
+%The use of these options is described in more detail in
 `\titleref{sect:memuser}'
-on page \pageref*{sect:memuser}.
+on page~\pageref*{sect:memuser}.
 
 \begin{description}
 
@@ -615,14 +616,15 @@ by redefining one or more of the following commands.
     Output from the default definition can be seen
     below the footer
     at the bottom of this page.
-    The definition, split onto three lines to fit, is:
+    The definition 
+    (here split onto three lines to fit) 
+    is:
 
 \begin{verbatim}
 Branch: \gitBranch\,@\,\gitAbbrevHash{} / 
 Release:\gitReln{} (\gitAuthorDate)\\
 Head tags: \gitTags
 \end{verbatim}
-
 You can tailor this by redefining \verb!\gitMark!. 
 For example: 
 
@@ -739,6 +741,13 @@ Robbie Morrison,
 Ryan Matlock, and
 Sasaki~Suguru.
 
+Finally, but by no means least,
+my thanks to the \textsc{Ctan} elves, and their dæmons, 
+particularly, in my case, 
+Robin Fairbairns and Petra Rübe-Pugliese,
+for their infinite patience and unstinting 
+dedication to the \TeX\ community.
+
 The failings, of course, I claim for my self.
 % - - - - - - - - - - - - - - - - - - - - - - - - - - -
 \section{Copyright \& licence}
@@ -749,7 +758,8 @@ conditions of the LaTeX Project Public License: either version 1.3
 of this license, or (at your option) any later version.
 
 The latest version of this license can be found
-at \href{http://www.latex-project.org/lppl.txt}{The \LaTeX\ Project},
+at the \LaTeX\ Project website,%
+\footnote{(\url{http://www.latex-project.org/lppl.txt})}
 and version 1.3 or later is part of all recent distributions of 
 \LaTeX.
 
