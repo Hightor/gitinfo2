@@ -84,6 +84,7 @@
 \frontmatter
 % -----------------------------------------------------
 \title{%
+	~\\[2\baselineskip]
 	\Huge \tpfname\\[2ex]%
 	\Large A package for accessing metadata\\from the \git\ \textsc{dvcs}
 	}
@@ -94,17 +95,11 @@
 {\centering
 Release:\gitReln\ (\gitAbbrevHash)\\
 }
-%\vspace*{2\baselineskip}
 % -----------------------------------------------------
-\begingroup
 \thispagestyle{empty}
-\aliaspagestyle{chapter}{empty}
-\setlength{\afterchapskip}{20pt}
-\let\clearpage\relax
-\let\chaptitlefont\Large\bfseries
-\vspace*{5\baselineskip}
+\aliaspagestyle{chapter}{plain}
+\clearforchapter
 \tableofcontents*
-\endgroup
 % -----------------------------------------------------
 \mainmatter
 \pagestyle{giruled}
@@ -650,7 +645,6 @@ You can tailor this by redefining \verb!\gitMarkFormat!. For example:
 \item[gitMarkPref]
     Contains the text of the watermark prefix, 
     which depends on the reason the document is being watermarked.
-    is being printed.
     The default values are \sfit{[Dirty]}, \sfit{[Draft]}, or \sfit{[git]}.
     You can tailor this by redefining \verb!\gitMarkPref!. For example: 
 
@@ -771,9 +765,10 @@ dedication to the \TeX\ community.
 The failings, of course, I claim for my self.
 Among these, a major one appears to be my incapacity 
 decently to package this stuff for 
-\textsc{Ctan} and \TeX{} Live.
-Now I have a Makefile, I hope this will improve. 
+\textsc{Ctan} and \TeX{}~Live.
+Now that I have finally built a Makefile, \emph{either} this will improve \emph{or} I now have two problems. 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\clearpage
 \section{Copyright \& licence}
 Copyright \copyright\ 2014, Brent Longborough.
 
@@ -795,7 +790,6 @@ gitinfo2.sty, gitexinfo.sty, gitinfo2.tex, gitinfo2.pdf,
 post-xxx-sample.txt, and gitPseudoHeadInfo.gin.
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - -
-\clearpage
 \section{From the author}
 Although my limitations as a \TeX nician
 mean that I've implemented \tpname\ in a rather simplistic way
