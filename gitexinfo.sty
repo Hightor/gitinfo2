@@ -18,7 +18,7 @@
 %     and gitPseudoHeadInfo.gin
 % -----------------------------------------------------
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{gitexinfo}[2014/05/12 v2.00 Auxiliary package for gitinfo2]
+\ProvidesPackage{gitexinfo}[2014/09/04 v2.0.2 Auxiliary package for gitinfo2]
 \RequirePackage{kvoptions}
 \RequirePackage{xstring}
 \RequirePackage{etoolbox}
@@ -123,4 +123,4 @@
 }{%
     \renewcommand{\git@tagmark}{\\Head tags: \gitTags}
 }
-\renewcommand{\gitMark}{Branch: \gitBranch\,@\,\gitAbbrevHash{} / Release:\gitReln{} (\gitAuthorDate)\git@tagmark}
+\renewcommand{\gitMark}{Branch: \gitBranch\,@\,\gitAbbrevHash{} \textbullet{} Release:\gitReln{} (\gitAuthorDate)\git@tagmark}

@@ -18,7 +18,7 @@
 %     and gitPseudoHeadInfo.gin
 % -----------------------------------------------------
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{gitinfo2}[2014/05/12 v2.00 git revision information]
+\ProvidesPackage{gitinfo2}[2014/09/04 v2.0.2 git revision information]
 \RequirePackage{etoolbox}
 \RequirePackage{kvoptions}
 \RequirePackage{eso-pic}
@@ -177,7 +177,7 @@
             \makebox[\paperwidth]{%
                 \begin{minipage}[b]{\paperwidth}%
                     \renewcommand{\baselinestretch}{1}%
-                    \centering{\gitMarkFormat\gitMarkPref{} \gitMark}%
+                    \centering{\gitMarkFormat\gitMarkPref{} \textbullet{} \gitMark}%
                 \end{minipage}%
             }%
         }%

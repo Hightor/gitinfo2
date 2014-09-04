@@ -3,8 +3,9 @@
 # gitinfo2
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 codelist = gitinfo2.sty gitexinfo.sty
-docslist = gitinfo2.tex gitinfo2.pdf gitPseudoHeadInfo.gin 
+docslist = gitinfo2.tex gitinfo2.pdf gitPseudoHeadInfo.gin
 morelist = gitinfotest.tex post-xxx-sample.txt README
+dirtlist = gitinfo2.pdf gitPseudoHeadInfo.gin gitinfo2.tar.gz
 archive = gitinfo2.tar.gz
 list = $(codelist) $(docslist) $(morelist)
 
@@ -15,12 +16,12 @@ $(archive): $(list)
 	perl `which ctanify` $^
 	chmod 644 $@
 
-clean: 
-	rm $(archive)
+clean:
+	git checkout $(dirtlist)
 
 gitinfo2.pdf: gitinfo2.tex gitPseudoHeadInfo.gin
 	xelatex $<
 	xelatex $<
 
-gitPseudoHeadInfo.gin: .git/gitHeadInfo.gin
+gitPseudoHeadInfo.gin: .git/gitHeadInfo.gin clean
 	cp $< $@
