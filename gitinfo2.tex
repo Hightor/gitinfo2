@@ -14,7 +14,7 @@
 %
 % This work consists of these files:
 %     gitinfo2.sty, gitexinfo.sty, gitinfo2.tex, gitinfo2.pdf,
-%     gitinfotest.tex, post-git-sample.txt,
+%     gitinfotest.tex, post-xxx-sample.txt,
 %     and gitPseudoHeadInfo.gin
 % -----------------------------------------------------
 \documentclass[a4paper,12pt,twoside,openany]{memoir}
@@ -56,9 +56,10 @@
 \chapterstyle{bringhurst}
 \pagestyle{empty}
 \aliaspagestyle{chapter}{empty}
-\settocdepth{section}
+\settocdepth{subsection}
 \setsecnumdepth{none}
 \newcommand{\bpara}[1]{\par\vspace{\beforeparaskip}\noindent\textbf{#1}\,}
+\newcommand{\rpara}[1]{\par\noindent\textbf{#1}\,}
 \newcommand{\sfit}[1]{\textit{#1}}
 \newcommand{\git}{\sfit{git}}
 \newcommand*{\emailat}{@}
@@ -73,7 +74,6 @@
 	bookmarksnumbered,
 	bookmarksopen,
 	linktocpage,
-	frenchlinks,
 	]{hyperref}
 \hypersetup{
    pdfauthor={Brent Longborough},
@@ -84,6 +84,7 @@
 \frontmatter
 % -----------------------------------------------------
 \title{%
+	~\\[2\baselineskip]
 	\Huge \tpfname\\[2ex]%
 	\Large A package for accessing metadata\\from the \git\ \textsc{dvcs}
 	}
@@ -94,17 +95,11 @@
 {\centering
 Release:\gitReln\ (\gitAbbrevHash)\\
 }
-%\vspace*{2\baselineskip}
 % -----------------------------------------------------
-\begingroup
 \thispagestyle{empty}
-\aliaspagestyle{chapter}{empty}
-\setlength{\afterchapskip}{20pt}
-\let\clearpage\relax
-\let\chaptitlefont\Large\bfseries
-\vspace*{5\baselineskip}
+\aliaspagestyle{chapter}{plain}
+\clearforchapter
 \tableofcontents*
-\endgroup
 % -----------------------------------------------------
 \mainmatter
 \pagestyle{giruled}
@@ -340,7 +335,7 @@ For example:
 
 \begin{quote}
 {\ttfamily
-[missing=Help!,notags=\{No tags?\},dirty=Yuck]
+[missing=Help!,notags=\{No\,tags?\},dirty=Eww!]
 }
 \end{quote}
 If you have complex needs, as in the second example,
@@ -619,11 +614,12 @@ by redefining one or more of the following commands.
     below the footer
     at the bottom of this page.
     The definition 
-    (here split onto three lines to fit) 
+    (here split onto four lines to fit) 
     is:
 
 \begin{verbatim}
-Branch: \gitBranch\,@\,\gitAbbrevHash{} / 
+Branch: \gitBranch\,@\,\gitAbbrevHash{} 
+\textbullet{} 
 Release:\gitReln{} (\gitAuthorDate)\\
 Head tags: \gitTags
 \end{verbatim}
@@ -650,7 +646,6 @@ You can tailor this by redefining \verb!\gitMarkFormat!. For example:
 \item[gitMarkPref]
     Contains the text of the watermark prefix, 
     which depends on the reason the document is being watermarked.
-    is being printed.
     The default values are \sfit{[Dirty]}, \sfit{[Draft]}, or \sfit{[git]}.
     You can tailor this by redefining \verb!\gitMarkPref!. For example: 
 
@@ -715,6 +710,15 @@ If you use it, you must load \sfit{datetime}
 before you load \tpname. 
 % -----------------------------------------------------
 \chapter{Etc}
+\section{Release notes}
+
+\rpara{R2.0.2: 2014-09-04 -- Mostly cosmetic} 
+\begin{itemize}
+\item Fix packaging problems for \textsc{Ctan} and \TeX{}~Live
+\item Improve appearance of watermark
+\item Improve documentation: correct file references. remove gibberish, extend acknowledgments
+\end{itemize}
+
 \section{Acknowledgements \& dependencies}
 
 The \href{http://tex.stackexchange.com}{\TeX.SE community}
@@ -751,23 +755,35 @@ Adrian Burd,
 Felix Wenger,
 Johannes Hoetzer,
 Martin W Leidig,
+Mikko Korpela,
 Nik (of gwdg nokta de),
 Omid (of gmail nokta com),
 Robbie Morrison,
 Ryan Matlock, and
 Sasaki~Suguru.
 
+Special thanks to Karl Berry for helping me to
+reduce my incompetence with \texttt{ctanify}.
+And, of course, for \TeX{} Live and everything else.
+
 Finally, but by no means least,
 my thanks to the \textsc{Ctan} elves, and their dæmons, 
 particularly, in my case, 
-Robin Fairbairns and Petra Rübe-Pugliese,
+Robin Fairbairns, Manfred Lotz, and Petra Rübe-Pugliese,
 for their infinite patience and unstinting 
 dedication to the \TeX\ community.
 
 The failings, of course, I claim for my self.
+Among these, a major one appears to be my incapacity 
+decently to package this stuff for 
+\textsc{Ctan} and \TeX{}~Live.
+Now that I have finally built a Makefile, \emph{either} this will improve \emph{or} I now have two problems. 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\clearpage
 \section{Copyright \& licence}
-Copyright \copyright\ 2014, Brent Longborough.
+Copyright \copyright\ 2014, Brent Longborough,
+who has asserted his moral right
+to be identified as the author of this work.
 
 This work --- \tpname\ --- may be distributed and/or modified under the
 conditions of the LaTeX Project Public License: either version 1.3
@@ -784,10 +800,9 @@ the Current Maintainer of this work is Brent Longborough.
 
 This work consists of the files
 gitinfo2.sty, gitexinfo.sty, gitinfo2.tex, gitinfo2.pdf,
-post-git-sample.txt, and gitPseudoHeadInfo.gin.
+post-xxx-sample.txt, and gitPseudoHeadInfo.gin.
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - -
-\clearpage
 \section{From the author}
 Although my limitations as a \TeX nician
 mean that I've implemented \tpname\ in a rather simplistic way
