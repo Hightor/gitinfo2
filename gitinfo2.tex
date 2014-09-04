@@ -56,7 +56,7 @@
 \chapterstyle{bringhurst}
 \pagestyle{empty}
 \aliaspagestyle{chapter}{empty}
-\settocdepth{section}
+\settocdepth{subsection}
 \setsecnumdepth{none}
 \newcommand{\bpara}[1]{\par\vspace{\beforeparaskip}\noindent\textbf{#1}\,}
 \newcommand{\sfit}[1]{\textit{#1}}
@@ -614,11 +614,12 @@ by redefining one or more of the following commands.
     below the footer
     at the bottom of this page.
     The definition 
-    (here split onto three lines to fit) 
+    (here split onto four lines to fit) 
     is:
 
 \begin{verbatim}
-Branch: \gitBranch\,@\,\gitAbbrevHash{} / 
+Branch: \gitBranch\,@\,\gitAbbrevHash{} 
+\textbullet{} 
 Release:\gitReln{} (\gitAuthorDate)\\
 Head tags: \gitTags
 \end{verbatim}
