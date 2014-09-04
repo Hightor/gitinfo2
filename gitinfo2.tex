@@ -31,6 +31,8 @@
 % -----------------------------------------------------
 % End of tweak
 % =====================================================
+\usepackage[nodayofweek]{datetime}
+\longdate{}
 \usepackage[pcount,grumpy,mark,markifdirty]{gitinfo2}
 \usepackage{tgpagella}
 \usepackage{tgadventor}
@@ -71,6 +73,7 @@
 	bookmarksnumbered,
 	bookmarksopen,
 	linktocpage,
+	frenchlinks,
 	]{hyperref}
 \hypersetup{
    pdfauthor={Brent Longborough},
@@ -85,7 +88,7 @@
 	\Large A package for accessing metadata\\from the \git\ \textsc{dvcs}
 	}
 \author{Brent Longborough}
-\date{12th May, 2014}
+\date{\displaydate{gitdate}}
 \maketitle
 
 {\centering
@@ -146,10 +149,10 @@ in the repository (module or submodule) root.
 If you actually want to use \tpname, then please read on.
 But you may just be reading this to see whether it will be useful;
 in this case,
-please skip the next chapter and go on to (Using the package)
-on page \pageref{ch:using}.
-If you like what you see, you can come back to
-read (Setup) later.
+please skip the next chapter and go on to `\titleref{ch:using}'
+on page \pageref*{ch:using}.
+Then, if you like what you see, come back to
+read `\titleref{ch:setup}' later.
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - -
 \clearpage
@@ -185,6 +188,7 @@ by not getting it right the first time.
 
 % -----------------------------------------------------
 \chapter{Setup and tailoring}
+\label{ch:setup}
 
 \tpname\ will be installed by your favourite package or distribution manager,
 but before you can start to use it,
@@ -227,7 +231,7 @@ As before, users of unix-like systems should ensure these files are marked as ex
 If you don't want to install \tpname\ using a package manager,
 you can instead just copy the two *.sty files into your document directory.
 However, it may be simpler, for more complex project trees,
-to install the package as part of your \TeX distribution.
+to install the package as part of your \TeX\ distribution.
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - -
 \section{Migrating from version 1}
@@ -307,9 +311,8 @@ since whatever tag is found is used as-is.
 \label{ch:using}
 Once you've set up your \git hooks, and done your first commit,
 merge, or checkout to drive them,
-you can start incorporating the metadata into your document.
-
-The \tpname\ package is loaded in the usual way:\\[0.5\baselineskip]
+you can start incorporating the metadata into your document, 
+by loading the \tpname\ package in the usual way:\\[0.5\baselineskip]
 \texttt{\textbackslash usepackage[$<options>$]\{gitinfo2\}}
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -328,41 +331,24 @@ issue a package warning, and carry on.
 If the \texttt{grumpy} option is used,
 this warning becomes an error, and processing stops.
 
-\item[\texttt{missing=\textit{text}}]
-If \tpname\ can't find \metaname (the metadata file),
-or some particular item of metadata,
-it will normally set the metadata to a default common value, ``(None)''.
-You can change this value to something else with, say
-\texttt{missing=Help!} or \texttt{missing=\{What a mess\}}.
+\item[\texttt{missing=\textit{text}, notags=\textit{text}, dirty=\textit{text}}]
+These three options allow you to tailor the default text used by \tpname\ when
+metadata is missing `(None)', 
+the branch head has no tags `(None)', 
+and the working copy has uncommitted changes `(*)'.
+For example:
 
+\begin{quote}
+{\ttfamily
+[missing=Help!,notags=\{No tags?\},dirty=Yuck]
+}
+\end{quote}
 If you have complex needs, as in the second example,
-don't forget to enclose your text in \{\}s.
-
-\item[\texttt{notags=\textit{text}}]
-If \tpname\ can't find any tags in the \git\ references,
-it will normally set the tag list to a default value, ``(None)''.
-You can change this value to something else with, say
-\texttt{missing=\{They stole my tags.\}} or 
-\texttt{notags=HelpNoTags!}. 
-
-Again, for complex needs, as in the first example,
-don't forget to enclose your text in \{\}s.
-
-\item[\texttt{dirty=\textit{text}}]
-If \tpname\ detects that your working copy is dirty
-(in the git sense --- it has uncommitted changes),
-it makes this information available as a command.
-For a clean repository, this is empty, while for a dirty repository
-it provides the default text ``(*)''.
-You can change this value to something else with, say
-\texttt{dirty=Unclean!} or \texttt{dirty=\{This repo is grotty\}}.
-
-Again, for complex needs, as in the second example,
 don't forget to enclose your text in \{\}s.
 
 \item[\texttt{maxdepth=\textit{n}}]
 In order to locate \metapath\ in the repository root,
-\tpname\ starts in the directory containing the document being processed,
+\tpname\ starts in the directory containing the master document,
 and searches up the directory tree until it finds it.
 This search is limited to {\ttfamily\itshape n} levels --- 4 by default.
 If have to deal with documents
@@ -370,7 +356,7 @@ deeper in your repository tree, you can extend this limit with, say,
 {\ttfamily maxdepth=8}.
 
 \end{description}
-
+\clearpage
 \subsection{Options for watermarking}
 
 These options allow you to place a watermark of \git\ metadata, 
@@ -394,6 +380,28 @@ This option is like {\ttfamily\bfseries mark,}
 but only activates the watermark if the last commit or checkout left 
 uncommitted changes in the repository.
 
+\item[marknotags]
+If \tpname\ can't find any tags in the \git\ references,
+it suppresses the second line of the watermark.
+If, however, you would like the second line always to appear,
+add this option to the package options.
+
+\item[raisemark=\textit{vertical space}]
+By default, \tpname\ sets the bottom line of the watermark
+at 1.5 baseline 
+skips\footnote{\texttt{1.5\textbackslash{}baselineskip}, an admittedly arbitrary value, chosen for my Canon printer.} 
+above the bottom of the paper.
+If you prefer something different, 
+you can specify it here.
+For example:
+
+\begin{quote}
+{\ttfamily
+[raisemark=0.95\textbackslash{}paperheight]
+}
+\end{quote}
+
+
 \item[draft]
 This option \emph{should not be used;} it only exists to `capture' the 
 {\ttfamily\bfseries draft} option from the document class definition.
@@ -402,13 +410,18 @@ This option \emph{should not be used;} it only exists to `capture' the
 
 \subsection{Options for \sfit{memoir} users}
 
+For more about these options, 
+please read
+%The use of these options is described in more detail in
+`\titleref{sect:memuser}'
+on page~\pageref*{sect:memuser}.
+
 \begin{description}
 
 \item[footinfo]
 This option is no longer used, and if present is silently ignored.
 For \sfit{memoir} users, \tpname\ now creates, automatically,
 three new page styles.
-More detail is given below (For \sfit{memoir} users).
 
 \item[pcount]
 For \sfit{memoir} users, this option will replace the folio
@@ -417,7 +430,7 @@ where \textit{x} is the folio and \textit{y} is the page count.
 
 No warning is given, and no action taken,
 if this parameter is used with another document class.
-More detail is given below (For \sfit{memoir} users).
+
 \end{description}
 % - - - - - - - - - - - - - - - - - - - - - - - - - - -
 \clearpage
@@ -605,14 +618,15 @@ by redefining one or more of the following commands.
     Output from the default definition can be seen
     below the footer
     at the bottom of this page.
-    The definition, split onto three lines to fit, is:
+    The definition 
+    (here split onto three lines to fit) 
+    is:
 
 \begin{verbatim}
 Branch: \gitBranch\,@\,\gitAbbrevHash{} / 
 Release:\gitReln{} (\gitAuthorDate)\\
 Head tags: \gitTags
 \end{verbatim}
-
 You can tailor this by redefining \verb!\gitMark!. 
 For example: 
 
@@ -649,6 +663,7 @@ You can tailor this by redefining \verb!\gitMarkFormat!. For example:
 % - - - - - - - - - - - - - - - - - - - - - - - - - - -
 \clearpage
 \section{For \sfit{memoir} users}
+\label{sect:memuser}
 If you use \sfit{memoir}, \tpname\ provides you with
 three new pagestyles, based on
 \sfit{plain},\sfit{ruled}, and \sfit{headings}.
@@ -684,6 +699,20 @@ explicitly.
 
 You can see an example in the footer of this page, 
 above the \tpname\ watermark.
+% - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\section{For \sfit{datetime} users}
+\label{sect:dtuser}
+If you use Nicola Talbot's excellent \sfit{datetime} package, 
+\tpname\ creates a new date object named \sfit{gitdate}, 
+which you can then refer to with other \sfit{datetime}
+functions. 
+
+Please refer to the \sfit{datetime} manual for
+further details, 
+especially in the section entitled `Saving Dates'. 
+
+If you use it, you must load \sfit{datetime} 
+before you load \tpname. 
 % -----------------------------------------------------
 \chapter{Etc}
 \section{Acknowledgements \& dependencies}
@@ -728,6 +757,13 @@ Robbie Morrison,
 Ryan Matlock, and
 Sasaki~Suguru.
 
+Finally, but by no means least,
+my thanks to the \textsc{Ctan} elves, and their dæmons, 
+particularly, in my case, 
+Robin Fairbairns and Petra Rübe-Pugliese,
+for their infinite patience and unstinting 
+dedication to the \TeX\ community.
+
 The failings, of course, I claim for my self.
 % - - - - - - - - - - - - - - - - - - - - - - - - - - -
 \section{Copyright \& licence}
@@ -737,17 +773,18 @@ This work --- \tpname\ --- may be distributed and/or modified under the
 conditions of the LaTeX Project Public License: either version 1.3
 of this license, or (at your option) any later version.
 
-The latest version of this license is at
-\url{http://www.latex-project.org/lppl.txt},
-and version 1.3 or later is part of all distributions of \LaTeX
-version 2005/12/01 or later.
+The latest version of this license can be found
+at the \LaTeX\ Project website,%
+\footnote{(\url{http://www.latex-project.org/lppl.txt})}
+and version 1.3 or later is part of all recent distributions of 
+\LaTeX.
 
 This work has the LPPL maintenance status `maintained';
 the Current Maintainer of this work is Brent Longborough.
 
 This work consists of the files
 gitinfo2.sty, gitexinfo.sty, gitinfo2.tex, gitinfo2.pdf,
-post-git-sample.txt, and \ginname.
+post-git-sample.txt, and gitPseudoHeadInfo.gin.
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - -
 \clearpage
