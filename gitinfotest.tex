@@ -13,6 +13,8 @@
 % End of tweak
 % =====================================================
 \usepackage[missing={(Oh my!)},dirty={Oh no!},markifdirty,marknotags]{gitinfo2}
+\usepackage{hyperref}
+\renewcommand{\gitWrapEmail}[1]{\url{#1}}
 \frenchspacing
 \begin{document}
 
@@ -44,5 +46,7 @@
 !\gitBranch ! Branch
 
 !\gitRoff ! Roff
+
+!\gitCommitterEmail! C.Email
 
 \end{document}

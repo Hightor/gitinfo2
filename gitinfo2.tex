@@ -60,6 +60,7 @@
 \setsecnumdepth{none}
 \newcommand{\bpara}[1]{\par\vspace{\beforeparaskip}\noindent\textbf{#1}\,}
 \newcommand{\rpara}[1]{\par\noindent\textbf{#1}\,}
+\newcommand{\dark}[1]{\texttt\textbf{{#1}}}
 \newcommand{\sfit}[1]{\textit{#1}}
 \newcommand{\git}{\sfit{git}}
 \newcommand*{\emailat}{@}
@@ -708,9 +709,41 @@ especially in the section entitled `Saving Dates'.
 
 If you use it, you must load \sfit{datetime} 
 before you load \tpname. 
+% - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\clearpage
+\section{Handling \TeX-hostile e-mail addresses}
+\label{sect:emailuser}
+Occasionally, a repository will contain `\TeX-hostile'
+e-mail addresses such as \verb!my_name@somewhere.net!.
+As a result, using the \dark{gitAuthorEmail} 
+or \dark{gitCommitterEmail} commands can cause errors.
+
+\tpname\ provides an e-mail wrapping command, 
+\verb!\gitWrapEmail!, to allow you to tailor your use
+of email addresses. Its default definition does nothing:
+\begin{verbatim}
+\newcommand{\gitWrapEmail}[1]{#1}
+\end{verbatim}
+You can tailor this by redefining \verb!\gitWrapEmail!. 
+For example, a number of packages
+(\sfit{hyperref} is one) provide a \verb!\url! command
+which provides the necessary protection.
+Using such a package (independently of \tpname), 
+you can redefine the \tpname\ wrapper in this way: 
+\begin{verbatim}
+\renewcommand{\gitWrapEmail}[1]{\url{#1}}
+\end{verbatim}
+
 % -----------------------------------------------------
 \chapter{Etc}
 \section{Release notes}
+
+\rpara{R2.0.3: 2014-09-05 -- Handle hostile e-mail addresses} 
+\begin{itemize}
+\item Provide an e-mail address wrapper command, 
+to allow users to tailor protection 
+against `\_' and other characters in email addresses.
+\end{itemize}
 
 \rpara{R2.0.2: 2014-09-04 -- Mostly cosmetic} 
 \begin{itemize}
@@ -774,10 +807,6 @@ for their infinite patience and unstinting
 dedication to the \TeX\ community.
 
 The failings, of course, I claim for my self.
-Among these, a major one appears to be my incapacity 
-decently to package this stuff for 
-\textsc{Ctan} and \TeX{}~Live.
-Now that I have finally built a Makefile, \emph{either} this will improve \emph{or} I now have two problems. 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - -
 \clearpage
 \section{Copyright \& licence}
