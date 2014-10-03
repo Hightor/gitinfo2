@@ -3,6 +3,7 @@
 *.bbl
 *.blg
 *.dvi
+*.ent
 *.jpg
 *.lock
 *.lof
@@ -21,3 +22,4 @@
 \#*
 auto/
 gitHeadInfo.gin
+

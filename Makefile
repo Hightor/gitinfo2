@@ -25,3 +25,9 @@ gitinfo2.pdf: gitinfo2.tex gitPseudoHeadInfo.gin
 
 gitPseudoHeadInfo.gin: .git/gitHeadInfo.gin clean
 	cp $< $@
+
+gitinfotest.pdf: gitinfotest.tex
+	xelatex $<
+
+%.view: %.pdf
+	/cygdrive/c/Program\ Files/Tracker\ Software/PDF\ Viewer/PDFXCview.exe $<
