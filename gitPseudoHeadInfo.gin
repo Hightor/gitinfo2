@@ -1,17 +1,17 @@
 \usepackage[%
-        shash={39d3087},
-        lhash={39d3087dd45197466bfba8587dd4a4a2aa811b18},
+        shash={e981cef},
+        lhash={e981cefe10ce8035de354461cb80c15ee4a39409},
         authname={Brent Longborough},
         authemail={brent+ctancontrib@longborough.org},
-        authsdate={2014-09-04},
-        authidate={2014-09-04 19:40:07 +0100},
-        authudate={1409856007},
+        authsdate={2014-10-03},
+        authidate={2014-10-03 22:57:33 +0100},
+        authudate={1412373453},
         commname={Brent Longborough},
         commemail={brent+ctancontrib@longborough.org},
-        commsdate={2014-09-04},
-        commidate={2014-09-04 19:40:07 +0100},
-        commudate={1409856007},
-        refnames={ (HEAD, tag: 2.0.2, release/2.0.2)},
-        firsttagdescribe={2.0.2},
-        reltag={2.0.2-0-g39d3087}
+        commsdate={2014-10-03},
+        commidate={2014-10-03 22:57:33 +0100},
+        commudate={1412373453},
+        refnames={ (HEAD, tag: 2.0.4, origin/CTAN, CTAN)},
+        firsttagdescribe={2.0.4},
+        reltag={2.0.4-0-ge981cef}
     ]{gitexinfo}
