@@ -748,8 +748,60 @@ If you use it, you must load \sfit{datetime}
 before you load \tpname.
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\section{Notes on the sequence of events}
+\label{sect:seqeve}
+Users of \tpname\ (including me) are frequently surprised
+by what appear to be incorrect results in their output,%
+\footnote{Most frequent are `wrong tag' and `falsely flagged as dirty'}
+but are determined in fact by the precise sequence of operations
+on a working copy.
 
+As it's impossible to foresee every possible workflow,
+what follows is a sequence of steps of a simple workflow
+which will serve as an example to help users
+to understand what is happening, and to avoid it.
 
+The example repository manages two main files:
+\sfit{abc.tex} and its output file, \sfit{abc.pdf}.%
+\footnote{Although derived files are often excluded from version control,
+the .pdf file in this case might need to be archived ---
+think of versions of a proposal, for example.}
+Intuitively, the overall sequence of one update \& release cycle
+might be like this:
+
+\begin{enumerate}
+\item Edit \sfit{abc.tex}, (perhaps) commit intermediate changes,
+format the output into \sfit{abc.pdf}, and
+check and repeat until ready for release;
+\item \label{wf:tex} Commit the release version of \sfit{abc.tex};
+\item \label{wf:tag} Tag the release;
+\item \label{wf:git} (Missing step);
+\item \label{wf:pdf} Format the release version of \sfit{abc.pdf}; and
+\item Commit the release version of \sfit{abc.pdf}.
+\end{enumerate}
+
+\noindent For reasons that I hope will become obvious,
+that doesn't work.
+The \git\ metadata is extracted and stored at step (\ref{wf:tex}).
+At that point, the release tag doesn't yet exist,
+and the working copy is dirty,
+since \sfit{abc.pdf} has been regenerated, and has changed
+since the last recorded version.
+
+It's simple to fix; all we have to do is
+ensure the working copy is clean and regenerate
+the saved metadata (now with correct tag information).
+Here's the missing step, kept, perhaps, somewhere in a \sfit{makefile:}
+
+\begin{enumerate}
+\item[\ref{wf:git}.] \texttt{git checkout abc.pdf}
+\end{enumerate}
+
+\noindent This will revert the .pdf file to its repository version,
+and then regenerate the stored metadata,
+including the release tag.
+Step (\ref{wf:pdf}) will now produce output showing the release tag
+and a clean working copy.
 % -----------------------------------------------------
 \chapter{Etc}
 \section{Release notes}
