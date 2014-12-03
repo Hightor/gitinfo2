@@ -1,0 +1,17 @@
+\usepackage[%
+        shash={c1b4e55},
+        lhash={c1b4e55b38ecfbdf1f8cd3a8baf3770743162620},
+        authname={Brent Longborough},
+        authemail={brent+ctancontrib@longborough.org},
+        authsdate={2014-12-03},
+        authidate={2014-12-03 12:21:52 +0000},
+        authudate={1417609312},
+        commname={Brent Longborough},
+        commemail={brent+ctancontrib@longborough.org},
+        commsdate={2014-12-03},
+        commidate={2014-12-03 12:21:52 +0000},
+        commudate={1417609312},
+        refnames={ (HEAD, develop)},
+        firsttagdescribe={2.0.4-9-gc1b4e55},
+        reltag={2.0.4-9-gc1b4e55-*}
+    ]{gitexinfo}
