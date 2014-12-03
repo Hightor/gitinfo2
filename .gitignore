@@ -4,6 +4,8 @@
 *.blg
 *.dvi
 *.ent
+*.fdb_latexmk
+*.fls
 *.jpg
 *.lock
 *.lof
@@ -22,4 +24,3 @@
 \#*
 auto/
 gitHeadInfo.gin
-
