@@ -3,7 +3,7 @@
 \begin{document}
 \START
 \AUTHOR{Brent Longborough}
-\CLASS[]{non,l3build test}
+\CLASS[]{none,l3build test}
 \TEST{LuaTeX discrepancy?}{
     \setbox0=\hbox{\textbullet}
     \showbox0
