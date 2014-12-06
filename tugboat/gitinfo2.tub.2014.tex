@@ -1,0 +1,157 @@
+%!TEX TS-program = latexmkx
+% 
+\documentclass[]{ltugboat}
+% --------------------------------------------------------------
+\usepackage{microtype}
+\usepackage{url}
+\usepackage{cite}
+\DeclareUrlCommand\afile{\urlstyle{tt}}
+\DeclareUrlCommand\adir{\urlstyle{tt}}
+\DeclareUrlCommand\afext{\urlstyle{tt}}
+\DeclareUrlCommand\aprog{\urlstyle{tt}}
+\DeclareUrlCommand\aluav{\urlstyle{sf}}
+\newcommand{\lbuild}{{\sf l3build}}
+\bibliographystyle{plain}
+\SetBibJustification{\raggedright}
+% --------------------------------------------------------------
+\title{\lbuild\ \Dash The Beginner's Tale}
+\author{Brent Longborough}
+\address{Abersychan, South Wales}
+\netaddress{brent@longborough.org}
+% --------------------------------------------------------------
+\begin{document}
+\maketitle
+\begin{longabstract}
+I stumbled across \lbuild\ by accident,
+when I wasn't even dreaming of changing my \CTAN\ workflow.
+This is the tale of the first part of my still-ongoing journey.
+\end{longabstract}
+
+% --------------------------------------------------------------
+\section{How it all started}
+\label{sec:how-it-all}
+
+I maintain a small package on \CTAN, 
+and for some time had been on the lookout 
+for tools to help in maintaining it.
+My workflow had evolved as far as a \afile{Makefile}
+which can handle some special requirements 
+for the \aprog{git} \acro{DVCS},
+typeset the manual, 
+ensure the file mode bits are appropriately set, 
+and use \aprog{ctanify} to roll everything up 
+into a compressed archive for uploading.
+I was quite happy with this arrangement, 
+and wasn't even thinking about changing it.
+
+Then, by coincidence, 
+two things happened in a single week.
+On Tuesday, my \TUB\ arrived,
+and I read Frank Mittelbach's 
+introduction to \lbuild{} \cite{Mittelbach:TB35-3-287}.
+Then, on Saturday, 
+at the \acro{UK-}\tug\ speaker meeting,
+Joseph Wright presented \lbuild{} 
+and described its use by the \LaTeX3 team. FIXME 
+And at that point it occurred to me that this 
+could be the tool I was looking for, 
+\emph{and} I could add some formal regression tests.
+
+% --------------------------------------------------------------
+\section{The journey so far}
+\label{sec:journey-so-far}
+
+As I work on Windows, 
+and use a full, up-to-date \TeX\ Live FIXME
+distribution, 
+\lbuild\ was already in place, 
+so there was no need to install it.
+I read the manual\cite{Latex3:2014:v5471} \emph{(twice)}, 
+then fired up an editor with an empty \afile{build.lua.} 
+
+% --------------------------------------------------------------
+\subsection{The first step}
+\label{sec:getting-started}
+
+On the principle of `start simple and add complexity later',
+I started by trying to make an archive with 
+just the two \afext{.sty} files.
+After a couple of false starts,
+my first attempt looked like this:
+
+\begin{verbatim}
+#!/usr/bin/env texlua
+-- Build script for gitinfo2
+module = "gitinfo2"
+  installfiles = {"*.sty"} 
+  packtdszip   = true
+kpse.set_program_name("kpsewhich")
+dofile(kpse.lookup("l3build.lua"))
+\end{verbatim}
+
+That produced an `interesting' archive.
+Only the \adir{doc/} subtree had any files;
+\afile{gitinfo2.pdf} had been copied (usefully, but unexpectedly), 
+along with \afile{post-xxx-sample.txt} with its extension removed. 
+No \afext{.sty} files were anywhere to be seen \Dash
+the \adir{tex/} subtree was empty.
+
+% --------------------------------------------------------------
+\subsection{The first mile}
+\label{sec:understanding-better}
+
+Back to the manual, where I finally understood that
+\verb!installfiles = {"*.sty"}!
+was the default.
+I had left out \aluav{sourcefiles}, 
+since I had (mistakenly) associated that with 
+\afext{.ins} and \afext{.dtx} files 
+\Dash things I don't use.
+
+I also discovered that \afext{.txt} files were included
+in the processing of \aluav{readmefiles} by default.
+
+So I had another go:
+
+\begin{verbatim}
+#!/usr/bin/env texlua
+-- Build script for gitinfo2
+module = "gitinfo2"
+  installfiles = {"*.sty"} 
+  sourcefiles  = {"*.sty"}
+  textfiles    = {"post-xxx-sample.txt"}
+  readmefiles  = {"README"}
+  packtdszip   = true
+kpse.set_program_name("kpsewhich")
+dofile(kpse.lookup("l3build.lua"))
+\end{verbatim}
+
+Now things were looking good.
+After a pause to find and fix a small bug in
+\aluav{readmefiles} processing, 
+the build script made me an archive including all of that,
+together with \afile{gitinfo2.pdf.} 
+   
+
+
+% --------------------------------------------------------------
+\subsection{Halfway house}
+\label{sec:halfway-house}
+
+% --------------------------------------------------------------
+\subsection{A testing path}
+\label{sec:testing-path}
+
+% --------------------------------------------------------------
+\section{Conclusion \Dash\ The journey continues}
+\label{sec:journey-continues}
+
+% --------------------------------------------------------------
+% --------------------------------------------------------------
+% --------------------------------------------------------------
+% --------------------------------------------------------------
+% --------------------------------------------------------------
+\bibliography{gitinfo2-tub}
+
+\makesignature
+\end{document}
