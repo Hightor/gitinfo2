@@ -18,7 +18,8 @@ doc: $(docname).pdf
 
 view: $(docname).view
 
-$(docname).pdf: $(docname).tex $(bibname).bib 
+# $(docname).pdf: $(docname).tex $(bibname).bib 
+$(docname).pdf: $(docname).tex
 	rm -f $@ $(auxdir)/$@
 	$(lmkexec) -outdir=$(auxdir) $(silent) -xelatex -e '$$makeindex=q/makeindex %O -s blindex.ist -o %D %S/' "$<"    
 	chmod a+rw $(auxdir) $(auxdir)/*
