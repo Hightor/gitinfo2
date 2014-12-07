@@ -23,6 +23,7 @@
 .#*
 \#*
 auto/
+*/.auxfiles/
 build/
 gitHeadInfo.gin
 tugboat/tugboat.bib
