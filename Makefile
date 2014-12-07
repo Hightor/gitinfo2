@@ -24,7 +24,7 @@ auxdir = .auxfiles
 ship: $(archive)
 
 $(archive): $(list)
-	chmod 644 $^
+	chmod -R 644 $^ testfiles/* 
 	perl `which ctanify` $^
 	chmod 644 $@
 

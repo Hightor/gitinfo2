@@ -17,7 +17,7 @@ Don't change this file in any respect.
 %%   Right brace   \}     Tilde         \~}
 %%
 Author: Brent Longborough
-Main Class: non,l3build test
+Main Class: none,l3build test
 Options: 
 ============================================================
 TEST 1: LuaTeX discrepancy?
