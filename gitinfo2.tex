@@ -649,6 +649,7 @@ For example:
 \begin{verbatim}
 \color{gray}\small\sffamily
 \end{verbatim}
+if the \sfit{xcolor} package is loaded; if not, \verb!! is simply omitted.
 You can tailor this by redefining \verb!\gitMarkFormat!. For example:
 
 \begin{verbatim}
@@ -732,20 +733,23 @@ You can see an example in the footer of this page,
 above the \tpname\ watermark.
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - -
-\section{For \sfit{datetime} users}
+\section{For \sfit{datetime2} users}
 \label{sect:dtuser}
-If you use Nicola Talbot's excellent \sfit{datetime} package,
+If you use Nicola Talbot's excellent \sfit{datetime2} package,
 \tpname\ copies the value of the tag {\ttfamily\bfseries gitAuthorDate}
 as a new date object named \sfit{gitdate},
-which you can then refer to with other \sfit{datetime}
+which you can then refer to with other \sfit{datetime2}
 functions.
 
-Please refer to the \sfit{datetime} manual for
+Please refer to the \sfit{datetime2} manual for
 further details,
 especially in the section entitled `Saving Dates'.
 
-If you use it, you must load \sfit{datetime}
+If you use it, you must load \sfit{datetime2}
 before you load \tpname.
+
+The \sfit{datetime} package is also supported, 
+though deprecated. 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - -
 \section{Notes on the sequence of events}

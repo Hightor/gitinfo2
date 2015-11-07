@@ -64,7 +64,11 @@
 \newcommand{\gitRoff}{}
 \newcommand{\gitDescribe}{(None)}
 \newcommand{\gitMarkPref}{[git]}
-\newcommand{\gitMarkFormat}{\color{gray}\small\sffamily}
+\@ifpackageloaded{xcolor}{%
+    \newcommand{\gitMarkFormat}{\color{gray}\small\sffamily}%
+}{%
+    \newcommand{\gitMarkFormat}{\small\sffamily}%
+}
 \newcommand{\gitMark}{}
 \newcommand{\gitWrapEmail}[1]{#1}
 % private values
