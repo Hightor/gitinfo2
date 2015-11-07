@@ -313,6 +313,9 @@ would allow you to find any tag whatsoever.
 You can change the hooks without needing to alter \tpname,
 since whatever tag is found is used as-is.
 
+\emph{Important note:} The \texttt{--match} parameter is a unix glob, 
+\emph{not} a regular expression. This has tripped up a number of users.
+
 % -----------------------------------------------------
 \chapter{Using the package}
 \label{ch:using}
@@ -869,6 +872,7 @@ the deduplication of \metaname.
 
 My sincere thanks, too, to
 Adrian Burd,
+Enrico Malizia,
 Felix Wenger,
 ivokabadshow (on GitHub),
 Johannes Hoetzer,
