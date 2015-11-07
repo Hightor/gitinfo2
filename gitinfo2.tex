@@ -31,8 +31,9 @@
 % -----------------------------------------------------
 % End of tweak
 % =====================================================
-\usepackage[nodayofweek,level]{datetime}
-\longdate{}
+\usepackage[british]{babel}
+\selectlanguage{british}
+\usepackage[style=iso]{datetime2}
 \usepackage[pcount,grumpy,mark,markifdirty]{gitinfo2}
 \usepackage{tgpagella}
 \usepackage{tgadventor}
@@ -100,7 +101,7 @@
 	\Large A package for accessing metadata\\from the \git\ \textsc{dvcs}
 	}
 \author{Brent Longborough}
-\date{\displaydate{gitdate}}
+\date{\DTMenglishmonthname{\DTMfetchmonth{gitdate}} \DTMfetchyear{gitdate}}
 \maketitle
 
 {\centering
@@ -845,7 +846,7 @@ who rescued me from the jaws of the TeX parser by explaining
 \textbackslash expandafter.
 
 I'd also like to register my thanks to the owners of the packages on which
-\tpname\ depends: datetime, eso-pic, etoolbox, kvoptions, and xstring.
+\tpname\ depends: datetime2, eso-pic, etoolbox, kvoptions, and xstring.
 
 Many people have written to me kindly
 to point out some of the defects in \opname, and to offer code.
@@ -872,6 +873,7 @@ Felix Wenger,
 ivokabadshow (on GitHub),
 Johannes Hoetzer,
 Martin W Leidig,
+Maximilian Held,
 Mikko Korpela,
 Nik (of gwdg nokta de),
 Omid (of gmail nokta com),
