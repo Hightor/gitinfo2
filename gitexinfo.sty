@@ -72,6 +72,7 @@
     \expandafter\docsvlist\expandafter{#1}%
     \StrDel{#1}{)}[\bcut]%
     \StrDel{\bcut}{(HEAD}[\bcut]%
+    \StrSubstitute{\bcut}{ -> }{, }[\bcut]% Thanks to TorbjørnT
     \StrCount{\bcut}{, }[\xcut]%
     \StrCut[\xcut]{\bcut}{, }{\bcut}{\xcut}%
     \IfEq{\xcut}{}{}{%
