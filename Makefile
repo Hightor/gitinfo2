@@ -4,7 +4,7 @@
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 latexmk = /cygdrive/d/Programs/TeX.Live/texmf-dist/scripts/latexmk/latexmk.pl
 viewpdf = /cygdrive/c/Program\ Files/Tracker\ Software/PDF\ Viewer/PDFXCview.exe
-lmkexec = perl $(latexmk)
+lmkexec = latexmk
 silent =
 include ~/.make/Makefile
 
@@ -24,9 +24,10 @@ auxdir = .auxfiles
 ship: $(archive)
 
 $(archive): $(list)
-	chmod -R 644 $^ testfiles/* 
-	perl `which ctanify` $^
-	chmod 644 $@
+	# chmod -R 644 $^ testfiles/* 
+	# perl `which ctanify` $^
+	texlua build.lua ctan
+	# chmod 644 $@
 
 clean $(ginfile):
 	git checkout $(dirtlist)
@@ -42,6 +43,7 @@ gitinfo2.pdf: gitinfo2.tex $(pseudofile)
 
 $(pseudofile): $(ginfile)
 	cp $< $@
+	chmod 644 $@
 
 gitinfotest.pdf: gitinfotest.tex
 	xelatex $<
