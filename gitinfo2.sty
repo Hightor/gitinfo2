@@ -188,6 +188,15 @@
 % ---------------------------------------------------------------------
 % Datetime integration
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\@ifpackageloaded{datetime2}{%
+    \IfEq{\gitAuthorDate}{\gitInf@missing}{%
+        \DTMsavedate{gitdate}{\THEDAY-\THEMONTH-\THEYEAR}
+    }{%
+        \StrCut{\gitAuthorDate}{-}{\gitInf@year}{\gitInf@md}
+        \StrCut{\gitInf@md}{-}{\gitInf@month}{\gitInf@day}
+        \DTMsavenoparsedate{gitdate}{\gitInf@year}{\gitInf@month}{\gitInf@day}{-1}
+    }    
+}{}%
 \@ifpackageloaded{datetime}{%
     \IfEq{\gitAuthorDate}{\gitInf@missing}{%
         \newdate{gitdate}{\THEDAY}{\THEMONTH}{\THEYEAR}
