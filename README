@@ -10,17 +10,6 @@ please see the accompanying manual: gitinfo2.pdf.
 Change History
 ~~~~~~~~~~~~~~
 
-Warning: existing repositories using gitinfo will need to be migrated
-in order to take advantage of the new features in gitinfo2.
+Current Release: 2.0.5 2015-11-09
 
-2014-09-04  2.0.2   Corrected packaging errors
-                    Improve default appearance of watermarks
-
-2014-05-12  2.0     Changed package name for backward compatibility
-                    Improved documentation
-                    New tags for improved Release annotation
-                    A relocated 'gitHeadInfo.gin' file
-                    Re-engineered page styles for Memoir users
-                    Watermarking facility
-
-2011-08-29  1.0     Initial release
+Please see gitinfo2.pdf in the package documentation directory

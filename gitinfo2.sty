@@ -18,8 +18,9 @@
 %     and gitPseudoHeadInfo.gin
 % -----------------------------------------------------
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{gitinfo2}[2014/10/03 v2.0.4 git revision information]
+\ProvidesPackage{gitinfo2}[2015/11/09 v2.0.5 git revision information]
 \RequirePackage{etoolbox}
+\RequirePackage{xstring}
 \RequirePackage{kvoptions}
 \RequirePackage{eso-pic}
 \SetupKeyvalOptions{family=gitinfo,prefix=gitInf@}
@@ -63,7 +64,11 @@
 \newcommand{\gitRoff}{}
 \newcommand{\gitDescribe}{(None)}
 \newcommand{\gitMarkPref}{[git]}
-\newcommand{\gitMarkFormat}{\color{gray}\small\sffamily}
+\@ifpackageloaded{xcolor}{%
+    \newcommand{\gitMarkFormat}{\color{gray}\small\sffamily}%
+}{%
+    \newcommand{\gitMarkFormat}{\small\sffamily}%
+}
 \newcommand{\gitMark}{}
 \newcommand{\gitWrapEmail}[1]{#1}
 % private values
@@ -106,7 +111,7 @@
   \else
     \edef\GI@repo@prefix{../\GI@repo@prefix}%
     \IfFileExists{\GI@githeadinfo@file}{%
-  \PackageWarningNoLine{gitinfo2}{%
+  \PackageInfo{gitinfo2}{%
   gitinfo2 found  : \GI@githeadinfo@file \MessageBreak
   }%
       \GI@export@macro\GI@githeadinfo@file
@@ -187,6 +192,15 @@
 % ---------------------------------------------------------------------
 % Datetime integration
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\@ifpackageloaded{datetime2}{%
+    \IfEq{\gitAuthorDate}{\gitInf@missing}{%
+        \DTMsavedate{gitdate}{\THEDAY-\THEMONTH-\THEYEAR}
+    }{%
+        \StrCut{\gitAuthorDate}{-}{\gitInf@year}{\gitInf@md}
+        \StrCut{\gitInf@md}{-}{\gitInf@month}{\gitInf@day}
+        \DTMsavenoparsedate{gitdate}{\gitInf@year}{\gitInf@month}{\gitInf@day}{-1}
+    }    
+}{}%
 \@ifpackageloaded{datetime}{%
     \IfEq{\gitAuthorDate}{\gitInf@missing}{%
         \newdate{gitdate}{\THEDAY}{\THEMONTH}{\THEYEAR}

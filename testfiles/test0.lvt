@@ -1,0 +1,35 @@
+\input regression-test.tex\relax
+\documentclass{article}
+\makeatletter
+\newcommand{\GI@repo@prefix}{}
+\newcommand{\GI@githeadinfo@file}{\GI@repo@prefix./gitPseudoHeadInfo.gin}
+\makeatother
+\usepackage{gitinfo2}
+\begin{document}
+\START
+\AUTHOR{Brent Longborough}
+\CLASS[]{gitinfo2,develop}
+\TEST{Basic tags}{
+    \TYPE {\gitReferences}
+    \TYPE {!\gitVtag!}
+    \TYPE {!\gitVtags!}
+    \TYPE {\gitVtagn}
+    \TYPE {!\gitRel!}
+    \TYPE {!\gitRels!}
+    \TYPE {\gitReln}
+    \TYPE {\gitFirstTagDescribe}
+    \TYPE {\gitDescribe}
+    \TYPE {\gitTags}
+    \TYPE {\gitDirty}
+    \TYPE {\gitBranch}
+    \TYPE {\gitRoff}
+    \TYPE {\gitCommitterEmail}
+    }
+\TEST{Mark tags}{
+    \show\gitMark
+    \setbox0=\hbox{\gitMark}
+    \showbox0
+    }
+\end{document}
+\END
+% \renewcommand{\gitMark}{Branch: \gitBranch\,@\,\gitAbbrevHash{} \textbullet{} Release:\gitReln{} (\gitAuthorDate)\git@tagmark}

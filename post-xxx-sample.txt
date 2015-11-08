@@ -1,6 +1,7 @@
 #!/bin/sh
 # Copyright 2014 Brent Longborough
 # Part of gitinfo2 package Version 2
+# Release 2.0.5
 # Please read gitinfo2.pdf for licencing and other details
 # -----------------------------------------------------
 # Post-{commit,checkout,merge} hook for the gitinfo2 package
@@ -19,11 +20,11 @@ git --no-pager log -1 --date=short --decorate=short \
         authsdate={%ad},
         authidate={%ai},
         authudate={%at},
-        commname={%an},
-        commemail={%ae},
-        commsdate={%ad},
-        commidate={%ai},
-        commudate={%at},
+        commname={%cn},
+        commemail={%ce},
+        commsdate={%cd},
+        commidate={%ci},
+        commudate={%ct},
         refnames={%d},
         firsttagdescribe={$FIRSTTAG},
         reltag={$RELTAG}

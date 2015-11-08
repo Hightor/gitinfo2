@@ -4,6 +4,8 @@
 *.blg
 *.dvi
 *.ent
+*.fdb_latexmk
+*.fls
 *.jpg
 *.lock
 *.lof
@@ -21,5 +23,9 @@
 .#*
 \#*
 auto/
+*/.auxfiles/
+build/
 gitHeadInfo.gin
-
+tugboat/tugboat.bib
+bb/
+gitinfo2.zip

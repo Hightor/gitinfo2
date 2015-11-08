@@ -1,0 +1,327 @@
+%!TEX TS-program = latexmkx
+%
+% --------------------------------------------------------------
+\begin{filecontents}{gitinfo2-tub.bib}
+@String{ack-bnb = "Barbara N. Beeton,
+                   American Mathematical Society,
+                   P.O. Box 6248,
+                   Providence, RI 02940,
+                   USA,
+                   Tel: +1 401 455 4014,
+                   e-mail: \path|bnb@math.ams.org|"}
+
+@String{ack-nhfb = "Nelson H. F. Beebe,
+                    University of Utah,
+                    Department of Mathematics, 110 LCB,
+                    155 S 1400 E RM 233,
+                    Salt Lake City, UT 84112-0090, USA,
+                    Tel: +1 801 581 5254,
+                    FAX: +1 801 581 4148,
+                    e-mail: \path|beebe@math.utah.edu|,
+                            \path|beebe@acm.org|,
+                            \path|beebe@computer.org| (Internet),
+                    URL: \path|http://www.math.utah.edu/~beebe/|"}
+
+@String{j-TUGboat               = "TUGboat"}
+
+@Misc{Latex3:2014:v5471,
+  author =       "{The \LaTeX3{} Project}",
+  title =        "The l3build package: Checking and building packages",
+  month =        nov,
+  year =         "2014",
+  howpublished = {Available from {\CTAN}, {\url{macros/latex/contrib/l3build/l3build.pdf}}},
+  bibdate =      "Sat Dec 12 20:40:00 2014",
+}
+
+@Article{Mittelbach:TB35-3-287,
+  author =       "Frank Mittelbach and Will Robertson and {The \LaTeX3} Team",
+  title =        "{{\tt l3build} \Dash A modern Lua test suite for {\TeX} programming}",
+  journal =      j-TUGboat,
+  volume =       "35",
+  number =       "3",
+  pages =        "287--293",
+  year =         "2014",
+  ISSN =         "0896-3207",
+  bibdate =      "Thu Dec 04 17:03:30 GMT 2014",
+  acknowledgement = ack-bnb # " and " # ack-nhfb,
+}
+\end{filecontents}
+% --------------------------------------------------------------
+\documentclass[]{ltugboat}
+% --------------------------------------------------------------
+\usepackage{microtype}
+\usepackage{url}
+\usepackage{cite}
+% --------------------------------------------------------------
+% Set up a `welter of LaTeX braces' for ``Names of things''
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\DeclareUrlCommand\urlsame{\urlstyle{same}}
+\newcommand{\afile}[1]{\url{#1}}   % file
+\newcommand{\apath}[1]{\url{#1}}   % path
+\newcommand{\afext}[1]{\url{#1}}   % file extension
+\newcommand{\aprog}[1]{\textsf{\protect\urlsame{#1}}} % program or package
+\newcommand{\aluav}[1]{\textit{\textsf{\protect\urlsame{#1}}}} % Lua variable
+\newcommand{\lbuild}{\aprog{l3build}}
+% --------------------------------------------------------------
+\bibliographystyle{plain}
+\SetBibJustification{\raggedright}
+% --------------------------------------------------------------
+\title{\lbuild\ \Dash The Beginner's Tale}
+\author{Brent Longborough}
+\address{Hightor, Oaks Court\\
+  Abersychan, \textsc{np{\footnotesize 4 7}uz}\\
+  Wales}
+\netaddress{brent@longborough.org}
+% --------------------------------------------------------------
+\begin{document}
+\maketitle
+\begin{longabstract}
+I stumbled across \lbuild\ by accident,
+when I wasn't even dreaming of changing my \CTAN\ workflow.
+This is the tale of the first successes of my still-ongoing journey.
+\end{longabstract}
+
+% --------------------------------------------------------------
+\section{How it all started}
+\label{sec:how-it-all}
+
+I maintain a small package on \CTAN,
+and for some time had been on the lookout
+for tools to help in maintaining it.
+My workflow had evolved as far as a \afile{Makefile}
+which can handle some special requirements
+for the \aprog{git} \acro{DVCS},
+typeset the manual,
+ensure the file mode bits are appropriately set,
+and use \aprog{ctanify} to roll everything up
+into a compressed archive for uploading.
+I was quite happy with this arrangement,
+and wasn't even thinking about changing it.
+
+Then, by coincidence,
+two things happened in a single week.
+On Tuesday, my \TUB\ arrived,
+and I read Frank Mittelbach's
+introduction to \lbuild{} \cite{Mittelbach:TB35-3-287}.
+Then, on Saturday,
+at the \acro{UK-}\tug\ speaker meeting,
+Joseph Wright presented \lbuild{}
+and described its use by the \LaTeX3 team.
+And at that point it occurred to me that this
+could be the tool I was looking for,
+\emph{and} I could add some formal regression tests.
+
+% --------------------------------------------------------------
+\section{The journey so far}
+\label{sec:journey-so-far}
+
+As I work on Windows,
+and use a full, up-to-date \TeX\ Live
+distribution,
+\lbuild\ was already in place,
+so there was no need to install it.
+I read the manual\cite{Latex3:2014:v5471} \emph{(twice)},
+then fired up an editor with an empty \afile{build.lua},
+and wrote this skeleton:
+
+\begin{verbatim}
+  #!/usr/bin/env texlua
+  -- Build script for gitinfo2
+  module = "gitinfo2"
+  -- Need more here?
+  kpse.set_program_name("kpsewhich")
+  dofile(kpse.lookup("l3build.lua"))
+\end{verbatim}
+
+% --------------------------------------------------------------
+\subsection{The first step}
+\label{sec:getting-started}
+
+`Start simple and add complexity later'.
+I started by trying to make an archive with
+just the two \afext{.sty} files.
+After a couple of false starts,
+my first good attempt had these lines:
+
+\begin{verbatim}
+  installfiles = {"*.sty"}
+  packtdszip   = true
+\end{verbatim}
+
+That produced an `interesting' archive.
+Only the \apath{doc/} subtree had any files;
+\afile{gitinfo2.pdf} had been copied (usefully, but unexpectedly),
+along with \afile{post-xxx-sample.txt} with its extension removed.
+No \afext{.sty} files were anywhere to be seen \Dash
+the \apath{tex/} subtree was empty.
+
+% --------------------------------------------------------------
+\subsection{The first mile}
+\label{sec:understanding-better}
+
+Back to the manual, where I finally understood that
+\verb!installfiles = {"*.sty"}!
+was the default.
+I had left out \aluav{sourcefiles},
+since I had (mistakenly) associated that with
+\afext{.ins} and \afext{.dtx} files
+\Dash things I don't use.
+I also discovered that \afext{.txt} files were included
+in the processing of \aluav{readmefiles} by default.
+
+So I had another go:
+
+\begin{verbatim}
+  installfiles = {"*.sty"}
+  sourcefiles  = {"*.sty"}
+  textfiles    = {"post-xxx-sample.txt"}
+  readmefiles  = {"README"}
+  packtdszip   = true
+\end{verbatim}
+
+Now things were looking good.
+After a pause to find and fix a small bug in
+\aluav{readmefiles} processing,
+the build script made me an archive including all of that,
+together with \afile{gitinfo2.pdf}.
+But I was still uneasy.
+The duplication of references to \afext{.sty} files
+made me feel uncomfortable,
+and the archive \acro{TDS} file included
+a \apath{source/} subtree with extra copies of them.
+
+Now, seized by an iron determination to bend the system to my will,
+I hacked together a really ugly patch,
+and sent it off to a friend on the \LaTeX3 team,
+who politely rejected it (quite rightly),
+and provided exra function to solve \emph{the} problem,
+rather than just \emph{my} problem.
+The fix also came with recommendations
+on fixing my build configuration to match.
+
+% --------------------------------------------------------------
+\subsection{Halfway house}
+\label{sec:halfway-house}
+
+With the fix installed, a production-ready
+build configuration was now in sight.
+All I needed was to bring in an additional text file,
+add a demo \afext{.tex} file,
+and ensure that the source for the manual would be
+included in the archive and typeset at build time.
+The core declarations of my definitive \afile{build.lua} are:
+
+\begin{verbatim}
+  sourcefiles  = {"*.sty"}
+  typesetfiles = {"gitinfo2.tex"}
+  textfiles    = {"gitPseudoHeadInfo.gin",
+                  "post-xxx-sample.txt"}
+  demofiles    = {"gitinfotest.tex"}
+  readmefiles  = {"README"}
+  packtdszip   = true
+  typesetexe   = "xelatex"
+  typesetopts  = "-interaction=batchmode"
+\end{verbatim}
+
+At this point,
+I had a complete replacement for
+my \CTAN\ workflow
+(apart from minor details specific to
+the package concerned),
+so I took the day off.
+
+% --------------------------------------------------------------
+\subsection{A testing path}
+\label{sec:testing-path}
+
+With my \CTAN\ packaging in order,
+I now turned to my \emph{principal} reason for
+moving to \lbuild \Dash regression testing.
+Building my specific test cases is still in the early stages,
+and none of them is sufficiently interesting (yet)
+to include here in detail.
+So far, however, the experience is encouraging \Dash
+test cases (once designed) are very easy to build and register.
+
+The first step in preparing tests is to create a subdirectory,
+\apath{testfiles/}, in your package directory.
+You then create one or more individual test files,
+which are \TeX\ or \LaTeX\ files
+(specially crafted as described in the \lbuild\ manual),
+with the extension \afext{.lvt}.
+
+\lbuild\ regression testing is based on the mechanical
+comparison of \TeX\ log files, and
+takes place in two parts.
+To start, it creates reference logs by typesetting
+the test files, one at a time,
+and transforming the output log files into a canonical format.
+Then, when regression tests are needed,
+the tests are typeset again, and the resulting logs canonicalised
+and compared with the reference.
+If a new logfile does not match its reference log,
+then that particular set of tests is considered to have failed,
+but all tests are run before any further processing
+(such as formatting the manual or building the archive)
+is abandoned.
+
+One challenge that I came across fairly quickly is related to
+differences in behaviour between \aprog{pdftex} and \aprog{xetex} on the one hand, and \aprog{luatex} on the other.
+This example test file
+(an \acro{MWE}, with no direct relation to my package)
+produced great excitement, differing log output,
+and a possible Lua\TeX\ bug:
+
+\begin{verbatim}
+  \input regression-test.tex\relax
+  \documentclass{article}
+  \begin{document}
+  \START
+  \AUTHOR{Brent Longborough}
+  \CLASS[]{none,l3build test}
+  \TEST{LuaTeX discrepancy?}{
+      \setbox0=\hbox{\textbullet}
+      \showbox0
+      }
+  \end{document}
+  \END
+\end{verbatim}
+
+To help with the resolution of such differences,
+\lbuild\ allows for the creation of individual reference logs,
+specific to given engines,
+for those cases where the logs are legitimately different.
+
+% --------------------------------------------------------------
+\section{Conclusion \Dash\ The journey continues}
+\label{sec:journey-continues}
+
+All of this has taken place,
+on and off,  
+over about six days, during which
+I have learned a lot \Dash probably in the wrong order, 
+as I started with packaging and ended with test cases,
+rather than the other way round. 
+Now that I have successfully migrated my workflow to \lbuild,
+I have to buckle down to writing test cases,
+so this part of \textit{`The Beginner's Tale'} must end here.
+
+As a fairly unsophisticated end user, 
+I feel that \lbuild\ provides a useful, 
+simple, and easily configurable tool 
+for testing and release workflow.
+If you maintain a \CTAN\ package, 
+I encourage you to try it.
+
+\subsection*{Acknowledgements}
+\label{sec:acknowledgements}
+
+I'd like to thank Joseph Wright and Frank Mittelbach
+for their suggestions, encouragement, and code.
+And, of course, all those other giants of \TeX,
+on whose shoulders many of us stand.
+% --------------------------------------------------------------
+\bibliography{gitinfo2-tub}
+
+\makesignature
+\end{document}

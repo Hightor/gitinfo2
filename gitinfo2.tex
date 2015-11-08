@@ -31,8 +31,9 @@
 % -----------------------------------------------------
 % End of tweak
 % =====================================================
-\usepackage[nodayofweek,level]{datetime}
-\longdate{}
+\usepackage[british]{babel}
+\selectlanguage{british}
+\usepackage[style=iso]{datetime2}
 \usepackage[pcount,grumpy,mark,markifdirty]{gitinfo2}
 \usepackage{tgpagella}
 \usepackage{tgadventor}
@@ -100,7 +101,7 @@
 	\Large A package for accessing metadata\\from the \git\ \textsc{dvcs}
 	}
 \author{Brent Longborough}
-\date{\displaydate{gitdate}}
+\date{\DTMenglishmonthname{\DTMfetchmonth{gitdate}} \DTMfetchyear{gitdate}}
 \maketitle
 
 {\centering
@@ -210,7 +211,8 @@ If not, I suggest you follow these steps:
 For this example, let's suppose that the root of the working tree is in
 \texttt{\textasciitilde/compsci}
 
-\item Copy the file \texttt{post-xxx-sample.txt} as \texttt{post-checkout}
+\item Copy the file \texttt{post-xxx-sample.txt}
+(which is in the same folder of your \TeX{} distribution as this pdf) 
 into the \git\ hooks directory in your working copy.
 In our example case, you should end up with a file called
 \texttt{\textasciitilde/compsci/.git/hooks/post-checkout}
@@ -310,7 +312,10 @@ RELTAG=\$(git describe \textellipsis\ --match '*' \textellipsis)
 would allow you to find any tag whatsoever.
 
 You can change the hooks without needing to alter \tpname,
-since whatever tag is found is used as-is.
+since any tag found is used `as-is'.
+
+\emph{Important note:} The \texttt{--match} parameter is a unix glob, 
+\emph{not} a regular expression. This has tripped up a number of users.
 
 % -----------------------------------------------------
 \chapter{Using the package}
@@ -461,7 +466,10 @@ Here they are:
     Depending on how you use \git,\footnote{For example, checking out unnamed branches}
     this information may not be available,
     and will then be shown as the default or specified value of
-    the \texttt{missing} package option.\\
+    the \texttt{missing} package option.
+    For \git{} versions before 2.0.0, where the current HEAD commit refers
+    to more than one branch head, this value may be different from the
+    currectly checked-out branch.\\
     Example: \textit{\gitBranch}
 
 \item[gitDirty]
@@ -649,6 +657,7 @@ For example:
 \begin{verbatim}
 \color{gray}\small\sffamily
 \end{verbatim}
+if the \sfit{xcolor} package is loaded; if not, \verb!! is simply omitted.
 You can tailor this by redefining \verb!\gitMarkFormat!. For example:
 
 \begin{verbatim}
@@ -732,20 +741,23 @@ You can see an example in the footer of this page,
 above the \tpname\ watermark.
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - -
-\section{For \sfit{datetime} users}
+\section{For \sfit{datetime2} users}
 \label{sect:dtuser}
-If you use Nicola Talbot's excellent \sfit{datetime} package,
+If you use Nicola Talbot's excellent \sfit{datetime2} package,
 \tpname\ copies the value of the tag {\ttfamily\bfseries gitAuthorDate}
 as a new date object named \sfit{gitdate},
-which you can then refer to with other \sfit{datetime}
+which you can then refer to with other \sfit{datetime2}
 functions.
 
-Please refer to the \sfit{datetime} manual for
+Please refer to the \sfit{datetime2} manual for
 further details,
 especially in the section entitled `Saving Dates'.
 
-If you use it, you must load \sfit{datetime}
+If you use it, you must load \sfit{datetime2}
 before you load \tpname.
+
+The \sfit{datetime} package is also supported, 
+though deprecated. 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - -
 \section{Notes on the sequence of events}
@@ -806,6 +818,16 @@ and a clean working copy.
 \chapter{Etc}
 \section{Release notes}
 
+\rpara{R2.0.5: 2015-11-09 -- Bug fixes and general improvements}
+\begin{itemize}
+\item Support for the \sfit{datetime2} package
+\item Provide correct committer metadata in hook sample
+\item Change Warning to Info when \sfit{gitHeadinfo.gin} is found
+\item Move all package dependencies from \sfit{gitexinfo.sty} to \sfit{gitinfo2.sty}
+\item Support for \git{} Version 2 log output, with more accurate branch name analysis
+\item Only use colours if the \sfit{xcolor} package is loaded
+\end{itemize}
+
 \rpara{R2.0.4: 2014-10-03 -- Fixes and documentation improvements}
 \begin{itemize}
 \item More robust \git\ hooks,
@@ -841,7 +863,7 @@ who rescued me from the jaws of the TeX parser by explaining
 \textbackslash expandafter.
 
 I'd also like to register my thanks to the owners of the packages on which
-\tpname\ depends: datetime, eso-pic, etoolbox, kvoptions, and xstring.
+\tpname\ depends: datetime2, eso-pic, etoolbox, kvoptions, and xstring.
 
 Many people have written to me kindly
 to point out some of the defects in \opname, and to offer code.
@@ -864,16 +886,22 @@ the deduplication of \metaname.
 
 My sincere thanks, too, to
 Adrian Burd,
-Felix Wenger,
-ivokabadshow (on GitHub),
+cedb12 (on GitHub),
+Maximilian Held,
 Johannes Hoetzer,
-Martin W Leidig,
+ivokabadshow (on GitHub),
 Mikko Korpela,
+Martin W Leidig,
+Enrico Malizia,
+Ken Mankoff,
+Ryan Matlock,
+Robbie Morrison,
 Nik (of gwdg nokta de),
 Omid (of gmail nokta com),
-Robbie Morrison,
-Ryan Matlock, and
-Sasaki~Suguru.
+Sasaki~Suguru,
+Tor\-bjørn~T (on GitHub and TeX.SE),
+and
+Felix Wenger.
 
 Special thanks to Karl Berry for helping me to
 reduce my incompetence with \texttt{ctanify}.
