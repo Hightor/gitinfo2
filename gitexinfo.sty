@@ -70,13 +70,22 @@
         }%
     }%
     \expandafter\docsvlist\expandafter{#1}%
-    \StrDel{#1}{)}[\bcut]%
-    \StrDel{\bcut}{(HEAD}[\bcut]%
-    \StrSubstitute{\bcut}{ -> }{, }[\bcut]% Thanks to TorbjørnT
-    \StrCount{\bcut}{, }[\xcut]%
-    \StrCut[\xcut]{\bcut}{, }{\bcut}{\xcut}%
-    \IfEq{\xcut}{}{}{%
-        \renewcommand{\gitBranch}{\xcut}%
+    \StrDel{#1}{(}[\bcut]%
+    \StrDel{\bcut}{)}[\bcut]%
+    \IfSubStr{\bcut}{->}{%              git version 2+?
+        \StrBetween{\bcut,}{HEAD -> }{,}[\bcut]%  yes - no problem
+    }{%
+        \StrCount{\bcut}{, }[\xcut]%
+        \IfEq{\xcut}{0}{%               detached head?
+        }{%                             no
+            \StrCut[\xcut]{\bcut}{, }{\lcut}{\bcut}%  git vv < 2 - take last token
+        }%                                            (not always accurate)
+    }
+    \IfEq{\bcut}{}{}{%
+        \IfEq{\bcut}{HEAD}{%            detached head?
+        }{%                             no - we have the branch name
+            \renewcommand{\gitBranch}{\bcut}%
+        }%
     }%
 }%
 \newcommand{\git@taglist}[1]{%
