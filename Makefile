@@ -6,6 +6,7 @@ latexmk = /cygdrive/d/Programs/TeX.Live/texmf-dist/scripts/latexmk/latexmk.pl
 viewpdf = /cygdrive/c/Program\ Files/Tracker\ Software/PDF\ Viewer/PDFXCview.exe
 lmkexec = latexmk
 git = git
+# git = /cygdrive/c/Program\ Files\ \(x86\)/Git/bin/git.exe
 silent =
 include ~/.make/Makefile
 
