@@ -26,10 +26,10 @@ auxdir = .auxfiles
 ship: $(archive)
 
 $(archive): $(list)
-	# chmod -R 644 $^ testfiles/* 
-	# perl `which ctanify` $^
-	texlua build.lua ctan
-	# chmod 644 $@
+	# texlua build.lua ctan
+	chmod -R 644 $^ testfiles/* 
+	perl `which ctanify` $^
+	chmod 644 $@
 
 clean $(ginfile):
 	$(git) checkout $(dirtlist)
