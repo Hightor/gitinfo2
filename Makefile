@@ -5,6 +5,8 @@
 latexmk = /cygdrive/d/Programs/TeX.Live/texmf-dist/scripts/latexmk/latexmk.pl
 viewpdf = /cygdrive/c/Program\ Files/Tracker\ Software/PDF\ Viewer/PDFXCview.exe
 lmkexec = latexmk
+git = git
+# git = /cygdrive/c/Program\ Files\ \(x86\)/Git/bin/git.exe
 silent =
 include ~/.make/Makefile
 
@@ -30,7 +32,7 @@ $(archive): $(list)
 	# chmod 644 $@
 
 clean $(ginfile):
-	git checkout $(dirtlist)
+	$(git) checkout $(dirtlist)
 
 gitinfo2.pdf: gitinfo2.tex $(pseudofile)
 	rm -f $@ $(auxdir)/$@
