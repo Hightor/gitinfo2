@@ -466,7 +466,10 @@ Here they are:
     Depending on how you use \git,\footnote{For example, checking out unnamed branches}
     this information may not be available,
     and will then be shown as the default or specified value of
-    the \texttt{missing} package option.\\
+    the \texttt{missing} package option.
+    For \git{} versions before 2.0.0, where the current HEAD commit refers
+    to more than one branch head, this value may be different from the
+    currectly checked-out branch.\\
     Example: \textit{\gitBranch}
 
 \item[gitDirty]
@@ -814,6 +817,16 @@ and a clean working copy.
 % -----------------------------------------------------
 \chapter{Etc}
 \section{Release notes}
+
+\rpara{R2.0.5: 2015-11-09 -- Bug fixes and general improvements}
+\begin{itemize}
+\item Support for the \sfit{datetime2} package
+\item Provide correct committer metadata in hook sample
+\item Change Warning to Info when \sfit{gitHeadinfo.gin} is found
+\item Move all package dependencies from \sfit{gitexinfo.sty} to \sfit{gitinfo2.sty}
+\item Support for \git{} Version 2 log output, with more accurate branch name analysis
+\item Only use colours if the \sfit{xcolor} package is loaded
+\end{itemize}
 
 \rpara{R2.0.4: 2014-10-03 -- Fixes and documentation improvements}
 \begin{itemize}
