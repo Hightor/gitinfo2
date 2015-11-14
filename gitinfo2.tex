@@ -491,7 +491,7 @@ Here they are:
 
 \item[gitAuthorEmail]
     The email address of the author of this commit\\
-    Example: \textit{myemail\emailat evilspam.net}
+    Example: \textit{myemail\emailat evilspam.net} or \gitAuthorEmail
 
 \item[gitAuthorDate]
     The date this change was committed by the author,
@@ -818,6 +818,11 @@ and a clean working copy.
 \chapter{Etc}
 \section{Release notes}
 
+\rpara{R2.0.6: 2015-11-14 -- Detokenise the metadata}
+\begin{itemize}
+\item Detokenise names, emails, branches, and tags.
+\end{itemize}
+
 \rpara{R2.0.5: 2015-11-09 -- Bug fixes and general improvements}
 \begin{itemize}
 \item Support for the \sfit{datetime2} package
@@ -881,15 +886,16 @@ I think I owe a special mention, both for ideas and code,
 to Clea Rees, Jörg Weber, and Kai Mindermann
 for improving the handling of \git\ references;
 to Jörg Weber for watermarking;
-and to Michael Rans and Ross Vandegrift for
-the deduplication of \metaname.
+to Michael Rans and Ross Vandegrift for
+the deduplication of \metaname;
+and to \sfit{ivokabadshow} on GitHub 
+for a great example of how to detokenise the metadata.
 
 My sincere thanks, too, to
 Adrian Burd,
 cedb12 (on GitHub),
 Maximilian Held,
 Johannes Hoetzer,
-ivokabadshow (on GitHub),
 Mikko Korpela,
 Martin W Leidig,
 Enrico Malizia,
