@@ -1,5 +1,5 @@
 % gitexinfo.sty
-% Copyright 2014 Brent Longborough
+% Copyright 2015 Brent Longborough
 %
 % This work may be distributed and/or modified under the
 % conditions of the LaTeX Project Public License, either version 1.3
@@ -18,7 +18,7 @@
 %     and gitPseudoHeadInfo.gin
 % -----------------------------------------------------
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{gitexinfo}[2015/11/08 v2.0.5 Auxiliary package for gitinfo2]
+\ProvidesPackage{gitexinfo}[2015/11/14 v2.0.6 Auxiliary package for gitinfo2]
 \SetupKeyvalOptions{family=gitinfo,prefix=gitInf@}
 \DeclareStringOption{shash}
 \DeclareStringOption{lhash}
@@ -130,4 +130,9 @@
 }{%
     \renewcommand{\git@tagmark}{\\Head tags: \gitTags}
 }
-\renewcommand{\gitMark}{Branch: \gitBranch\,@\,\gitAbbrevHash{} \textbullet{} Release:\gitReln{} (\gitAuthorDate)\git@tagmark}
+\renewcommand{\gitMark}{%
+    Branch: \gitBranch\,@\,\gitAbbrevHash{} 
+    \textbullet{} 
+    Release:\gitReln{} 
+    (\gitAuthorDate)\git@tagmark%
+    }
