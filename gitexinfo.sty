@@ -38,18 +38,18 @@
 \ProcessKeyvalOptions*
 \renewcommand{\gitAbbrevHash}{\gitInf@shash}
 \renewcommand{\gitHash}{\gitInf@lhash}
-\renewcommand{\gitAuthorName}{\gitInf@authname}
+\renewcommand{\gitAuthorName}{\detokenize\expandafter{\gitInf@authname}}
 \renewcommand{\gitAuthorEmail}{\gitWrapEmail{\gitInf@authemail}}
 \renewcommand{\gitAuthorDate}{\gitInf@authsdate}
 \renewcommand{\gitAuthorIsoDate}{\gitInf@authidate}
 \renewcommand{\gitAuthorUnixDate}{\gitInf@authudate}
-\renewcommand{\gitCommitterName}{\gitInf@commname}
+\renewcommand{\gitCommitterName}{\detokenize\expandafter{\gitInf@commname}}
 \renewcommand{\gitCommitterEmail}{\gitWrapEmail{\gitInf@commemail}}
 \renewcommand{\gitCommitterDate}{\gitInf@commsdate}
 \renewcommand{\gitCommitterIsoDate}{\gitInf@commidate}
 \renewcommand{\gitCommitterUnixDate}{\gitInf@commudate}
-\renewcommand{\gitFirstTagDescribe}{\gitInf@firsttagdescribe}
-\renewcommand{\gitReferences}{\gitInf@refnames}
+\renewcommand{\gitFirstTagDescribe}{\detokenize\expandafter{\gitInf@firsttagdescribe}}
+\renewcommand{\gitReferences}{\detokenize\expandafter{\gitInf@refnames}}
 \newcommand{\git@vtag}[1]{%
     \def\do##1{%
         \StrCut{##1}{tag: }\lcut\rcut%
@@ -84,7 +84,7 @@
     \IfEq{\bcut}{}{}{%
         \IfEq{\bcut}{HEAD}{%            detached head?
         }{%                             no - we have the branch name
-            \renewcommand{\gitBranch}{\bcut}%
+            \renewcommand{\gitBranch}{\detokenize\expandafter{\bcut}}%
         }%
     }%
 }%
@@ -110,9 +110,9 @@
         \StrGobbleRight{\gitInf@describe}{9}[\gitInf@describe]%   Remove -g<hash>
         \StrCount{\gitInf@describe}{-}[\gitInf@mcount]%           Find last -
         \StrCut[\gitInf@mcount]{\gitInf@describe}{-}{\gitInf@rel}{\gitInf@off}
-        \renewcommand{\gitRel}{\gitInf@rel}
-        \renewcommand{\gitRels}{\space\gitInf@rel}
-        \renewcommand{\gitReln}{\space\gitInf@rel}
+        \renewcommand{\gitRel}{\detokenize\expandafter{\gitInf@rel}}
+        \renewcommand{\gitRels}{\space\gitRel}
+        \renewcommand{\gitReln}{\space\gitRel}
         \renewcommand{\gitRoff}{\gitInf@off}
         \renewcommand{\gitDescribe}{#1}
     }%
