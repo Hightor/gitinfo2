@@ -26,6 +26,7 @@
 \SetupKeyvalOptions{family=gitinfo,prefix=gitInf@}
 \DeclareBoolOption{draft}
 \DeclareBoolOption{grumpy}
+\DeclareBoolOption{local}
 \DeclareBoolOption{pcount}
 \DeclareBoolOption{footinfo}
 \DeclareBoolOption{mark}
@@ -76,7 +77,12 @@
 
 % private constants
 \providecommand{\GI@repo@prefix}{}
-\providecommand{\GI@githeadinfo@file}{\GI@repo@prefix.git/gitHeadInfo.gin}
+\ifbool{gitInf@local}{%
+    \providecommand{\GI@githeadinfo@file}{gitHeadLocal.gin}
+    \def\gitInf@maxdepth{0}
+}{%
+    \providecommand{\GI@githeadinfo@file}{\GI@repo@prefix.git/gitHeadInfo.gin}
+}
 \newcommand{\gitInf@dirtflag}{}
 \newcommand{\gitInf@describe}{}
 \newcommand{\gitInf@mcount}{}
