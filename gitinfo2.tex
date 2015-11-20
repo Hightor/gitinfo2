@@ -19,22 +19,10 @@
 % -----------------------------------------------------
 \documentclass[a4paper,12pt,twoside,openany]{memoir}
 % =====================================================
-% This is a tweak to allow this document to be formatted
-% even when it doesn't live in an adequately configured
-% git repository. Please do not try this at home.
-% You have been warned.
-% -----------------------------------------------------
-\makeatletter
-\newcommand{\GI@repo@prefix}{}
-\newcommand{\GI@githeadinfo@file}{\GI@repo@prefix./gitPseudoHeadInfo.gin}
-\makeatother
-% -----------------------------------------------------
-% End of tweak
-% =====================================================
 \usepackage[british]{babel}
 \selectlanguage{british}
 \usepackage[style=iso]{datetime2}
-\usepackage[pcount,grumpy,mark,markifdirty]{gitinfo2}
+\usepackage[local,pcount,grumpy,mark,markifdirty]{gitinfo2}
 \usepackage{tgpagella}
 \usepackage{tgadventor}
 \usepackage{fontspec}
@@ -79,6 +67,7 @@
 \newcommand{\tpname}{\sfit{gitinfo2}}
 \newcommand{\tpfname}{\textsf{gitinfo2.sty}}
 \newcommand{\ginname}{gitHeadInfo.gin}
+\newcommand{\locname}{\texttt{gitHeadLocal.gin}}
 \newcommand{\metaname}{\texttt{\ginname}}
 \newcommand{\metapath}{\texttt{.git/\ginname}}
 % -----------------------------------------------------
@@ -150,8 +139,15 @@ the metadata you need at any point in the document.
 \end{enumerate}
 
 It is important to note that \tpname\ reads the metadata
-with the equivalent of \texttt{\textbackslash input\{.git/\ginname\}}
+with the equivalent of \texttt{\textbackslash input\{\metapath\}}
 in the repository (module or submodule) root.
+
+Under some circumstances 
+(for example, when shipping something to \textsc{Ctan}),
+a document will not be able to access the standard metadata.
+In such a case, an option is available to read the metadata 
+from a \emph{manual} copy in the current directory, 
+called \locname. 
 
 If you actually want to use \tpname, then please read on.
 But you may just be reading this to see whether it will be useful;
@@ -335,8 +331,19 @@ The following options are available:
 
 \begin{description}
 
+\item[local]
+By default, \tpname\ normally reads \metapath\ (the metadata file).
+If, however, the document needs to be shipped outside of its own repository,
+this file will not be found.
+Under these circumstances, the {\ttfamily local} option may be used.
+This option causes \tpname\ to search
+instead for \locname\ in the current directory \emph{only.}
+Creating this file
+(normally by copying from \metapath) is your responsibility.
+
 \item[grumpy]
-By default, If \tpname\ can't find \metaname\ (the metadata file),
+In those cases where \tpname\ is unable to find the metadata file 
+(\metapath{}, or \locname\ if the {\ttfamily\bfseries local} option is used),
 it will set all the metadata to a common value, ``(None)'',
 issue a package warning, and carry on.
 If the \texttt{grumpy} option is used,
@@ -821,6 +828,15 @@ and a clean working copy.
 % -----------------------------------------------------
 \chapter{Etc}
 \section{Release notes}
+
+\rpara{R2.0.7: 2015-11-22 -- Allow metadata to be shipped}
+\begin{itemize}
+\item 
+Allow metadata to be read 
+from \texttt{\locname} in the current directory,
+rather than from \metapath, 
+via the \texttt{local} package option. 
+\end{itemize}
 
 \rpara{R2.0.6: 2015-11-14 -- Detokenise the metadata}
 \begin{itemize}
