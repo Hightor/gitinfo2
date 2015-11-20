@@ -12,7 +12,7 @@ include ~/.make/Makefile
 
 archive = gitinfo2.tar.gz
 ginfile = .git/gitHeadInfo.gin
-pseudofile = gitPseudoHeadInfo.gin
+pseudofile = gitHeadLocal.gin
 
 codelist = gitinfo2.sty gitexinfo.sty
 docslist = gitinfo2.tex gitinfo2.pdf $(pseudofile)
