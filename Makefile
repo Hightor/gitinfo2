@@ -10,14 +10,15 @@ git = git
 silent =
 include ~/.make/Makefile
 
-archive = gitinfo2.tar.gz
+pkg = gitinfo2
+archive = $(pkg).tar.gz
 ginfile = .git/gitHeadInfo.gin
 pseudofile = gitHeadLocal.gin
 
-codelist = gitinfo2.sty gitexinfo.sty
-docslist = gitinfo2.tex gitinfo2.pdf $(pseudofile)
+codelist = $(pkg).sty gitexinfo.sty
+docslist = $(pkg).tex $(pkg).pdf $(pseudofile)
 morelist = gitinfotest.tex post-xxx-sample.txt README
-dirtlist = gitinfo2.pdf gitinfo2.tar.gz $(pseudofile)
+dirtlist = $(pkg).pdf $(pkg).tar.gz $(pseudofile)
 
 list = $(codelist) $(docslist) $(morelist)
 
@@ -34,7 +35,7 @@ $(archive): $(list)
 clean $(ginfile):
 	$(git) checkout $(dirtlist)
 
-gitinfo2.pdf: gitinfo2.tex $(pseudofile)
+$(pkg).pdf: $(pkg).tex $(codelist) $(pseudofile)
 	rm -f $@ $(auxdir)/$@
 	$(lmkexec) -outdir=$(auxdir) $(silent) -xelatex -e '$$makeindex=q/makeindex %O -s blindex.ist -o %D %S/' "$<"
 	chmod a+rw $(auxdir) $(auxdir)/*
