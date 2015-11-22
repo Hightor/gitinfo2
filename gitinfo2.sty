@@ -102,6 +102,9 @@
   \GI@is@a@repo@true
   \IfFileExists{./\GI@githeadinfo@file}{%
     \edef\GI@repo@prefix{./}%
+      \PackageInfo{gitinfo2}{%
+      gitinfo2 found  : \GI@githeadinfo@file \MessageBreak
+      }%
     }{%
     \GI@set@repo@prefix}}
 
@@ -117,9 +120,9 @@
   \else
     \edef\GI@repo@prefix{../\GI@repo@prefix}%
     \IfFileExists{\GI@githeadinfo@file}{%
-  \PackageInfo{gitinfo2}{%
-  gitinfo2 found  : \GI@githeadinfo@file \MessageBreak
-  }%
+      \PackageInfo{gitinfo2}{%
+      gitinfo2 found  : \GI@githeadinfo@file \MessageBreak
+      }%
       \GI@export@macro\GI@githeadinfo@file
       }{%
       \expandafter\GI@set@repo@prefix@}%
