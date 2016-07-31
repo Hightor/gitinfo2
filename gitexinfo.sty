@@ -32,6 +32,7 @@
 \DeclareStringOption{commsdate}
 \DeclareStringOption{commidate}
 \DeclareStringOption{commudate}
+\DeclareStringOption{currbranch}
 \DeclareStringOption{refnames}
 \DeclareStringOption{firsttagdescribe}
 \DeclareStringOption{reltag}
@@ -48,6 +49,7 @@
 \renewcommand{\gitCommitterDate}{\gitInf@commsdate}
 \renewcommand{\gitCommitterIsoDate}{\gitInf@commidate}
 \renewcommand{\gitCommitterUnixDate}{\gitInf@commudate}
+\renewcommand{\gitCurrBranch}{\gitInf@currbranch}
 \renewcommand{\gitFirstTagDescribe}{\detokenize\expandafter{\gitInf@firsttagdescribe}}
 \renewcommand{\gitReferences}{\detokenize\expandafter{\gitInf@refnames}}
 \newcommand{\git@vtag}[1]{%
