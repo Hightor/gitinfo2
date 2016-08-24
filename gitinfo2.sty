@@ -32,12 +32,14 @@
 \DeclareBoolOption{mark}
 \DeclareBoolOption{markifdraft}
 \DeclareBoolOption{markifdirty}
+\DeclareBoolOption{markifnotmaster}
 \DeclareBoolOption{marknotags}
 \DeclareStringOption[(None)]{missing}
 \DeclareStringOption[(None)]{notags}
 \DeclareStringOption[(*)]{dirty}
 \DeclareStringOption[4]{maxdepth}
 \DeclareStringOption[1.5\baselineskip]{raisemark}
+\DeclareStringOption[master]{master}
 \ProcessKeyvalOptions*
 \newcommand{\gitAbbrevHash}{\gitInf@missing}
 \newcommand{\gitHash}{\gitInf@missing}
@@ -55,6 +57,7 @@
 \newcommand{\gitFirstTagDescribe}{\gitInf@missing}
 \newcommand{\gitReferences}{\gitInf@missing}
 \newcommand{\gitBranch}{\gitInf@missing}
+\newcommand{\gitCurrBranch}{\gitInf@missing}
 \newcommand{\gitVtag}{}
 \newcommand{\gitVtags}{}
 \newcommand{\gitVtagn}{\space\gitInf@missing}
@@ -102,6 +105,9 @@
   \GI@is@a@repo@true
   \IfFileExists{./\GI@githeadinfo@file}{%
     \edef\GI@repo@prefix{./}%
+      \PackageInfo{gitinfo2}{%
+      gitinfo2 found  : \GI@githeadinfo@file \MessageBreak
+      }%
     }{%
     \GI@set@repo@prefix}}
 
@@ -117,9 +123,9 @@
   \else
     \edef\GI@repo@prefix{../\GI@repo@prefix}%
     \IfFileExists{\GI@githeadinfo@file}{%
-  \PackageInfo{gitinfo2}{%
-  gitinfo2 found  : \GI@githeadinfo@file \MessageBreak
-  }%
+      \PackageInfo{gitinfo2}{%
+      gitinfo2 found  : \GI@githeadinfo@file \MessageBreak
+      }%
       \GI@export@macro\GI@githeadinfo@file
       }{%
       \expandafter\GI@set@repo@prefix@}%
@@ -169,6 +175,11 @@
 % ---------------------------------------------------------------------
 % Watermarking
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\ifbool{gitInf@markifnotmaster}{%
+	\IfStrEq{\gitCurrBranch}{\gitInf@master}{}{%
+		\booltrue{gitInf@mark}
+	}%
+}{}%
 \ifbool{gitInf@markifdirty}{%
     \IfEq{\gitDirty}{}{}{%
         \booltrue{gitInf@mark}

@@ -6,10 +6,31 @@
 # -----------------------------------------------------
 # Post-{commit,checkout,merge} hook for the gitinfo2 package
 #
+while getopts ":c:" opt; do
+        case $opt in
+        c)
+                if [ "$OPTARG" == "CI_BUILD_REF_NAME" ]; then
+                        CURRBRANCH=$CI_BUILD_REF_NAME
+                else
+                        CURRBRANCH=$OPTARG
+                fi
+                ;;
+        \?)
+                echo "unknown option: -$OPTARG"
+                exit 1
+                ;;
+        :)
+                echo "Option -$OPTARG requires an argument (name of current branch)."
+                exit 1
+                ;;
+        esac
+done
 # Get the first tag found in the history from the current HEAD
 FIRSTTAG=$(git describe --tags --always --dirty='-*' 2>/dev/null)
 # Get the first tag in history that looks like a Release
 RELTAG=$(git describe --tags --long --always --dirty='-*' --match '[0-9]*.*' 2>/dev/null)
+# Get the checked out branch
+CURRBRANCH="${CURRBRANCH:-$( git rev-parse --abbrev-ref HEAD )}"
 # Hoover up the metadata
 git --no-pager log -1 --date=short --decorate=short \
     --pretty=format:"\usepackage[%
@@ -27,5 +48,6 @@ git --no-pager log -1 --date=short --decorate=short \
         commudate={%ct},
         refnames={%d},
         firsttagdescribe={$FIRSTTAG},
-        reltag={$RELTAG}
+        reltag={$RELTAG},
+        currbranch={$CURRBRANCH}
     ]{gitexinfo}" HEAD > .git/gitHeadInfo.gin

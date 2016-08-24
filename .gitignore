@@ -24,6 +24,7 @@
 \#*
 auto/
 */.auxfiles/
+sandbox/
 build/
 gitHeadInfo.gin
 tugboat/tugboat.bib

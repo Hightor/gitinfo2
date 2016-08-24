@@ -1,0 +1,6 @@
+compile_pdf:
+  script:
+    - latexmk -cd -e -f -pdf -view=none "main.tex"
+  artifacts:
+    paths:
+      - main.pdf

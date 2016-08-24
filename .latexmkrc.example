@@ -1,0 +1,2 @@
+# gitinfo2
+system("gitinfo2 -c CI_BUILD_REF_NAME");

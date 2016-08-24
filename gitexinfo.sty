@@ -32,6 +32,7 @@
 \DeclareStringOption{commsdate}
 \DeclareStringOption{commidate}
 \DeclareStringOption{commudate}
+\DeclareStringOption{currbranch}
 \DeclareStringOption{refnames}
 \DeclareStringOption{firsttagdescribe}
 \DeclareStringOption{reltag}
@@ -48,6 +49,7 @@
 \renewcommand{\gitCommitterDate}{\gitInf@commsdate}
 \renewcommand{\gitCommitterIsoDate}{\gitInf@commidate}
 \renewcommand{\gitCommitterUnixDate}{\gitInf@commudate}
+\renewcommand{\gitCurrBranch}{\gitInf@currbranch}
 \renewcommand{\gitFirstTagDescribe}{\detokenize\expandafter{\gitInf@firsttagdescribe}}
 \renewcommand{\gitReferences}{\detokenize\expandafter{\gitInf@refnames}}
 \newcommand{\git@vtag}[1]{%
@@ -69,9 +71,9 @@
             }{}%
         }%
     }%
-    \expandafter\docsvlist\expandafter{#1}%
     \StrDel{#1}{(}[\bcut]%
     \StrDel{\bcut}{)}[\bcut]%
+    \expandafter\docsvlist\expandafter{\bcut}%
     \IfSubStr{\bcut}{->}{%              git version 2+?
         \StrBetween{\bcut,}{HEAD -> }{,}[\bcut]%  yes - no problem
     }{%
@@ -81,7 +83,8 @@
             \StrCut[\xcut]{\bcut}{, }{\lcut}{\bcut}%  git vv < 2 - take last token
         }%                                            (not always accurate)
     }
-    \IfEq{\bcut}{}{}{%
+    \IfEq{\bcut}{}{%
+    }{%
         \IfEq{\bcut}{HEAD}{%            detached head?
         }{%                             no - we have the branch name
             \renewcommand{\gitBranch}{\detokenize\expandafter{\bcut}}%
@@ -112,7 +115,7 @@
         \StrCut[\gitInf@mcount]{\gitInf@describe}{-}{\gitInf@rel}{\gitInf@off}
         \renewcommand{\gitRel}{\detokenize\expandafter{\gitInf@rel}}
         \renewcommand{\gitRels}{\space\gitRel}
-        \renewcommand{\gitReln}{\space\gitRel}
+        \IfEq{\gitRel}{}{}{\renewcommand{\gitReln}{\space\gitRel}}
         \renewcommand{\gitRoff}{\gitInf@off}
         \renewcommand{\gitDescribe}{#1}
     }%
